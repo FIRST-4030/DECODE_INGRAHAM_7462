@@ -85,9 +85,7 @@ public class GoalTagLimelight {
                 telemetry.addData("boty", y);
 
                 goalYaw = botpose.getOrientation().getYaw();
-                goalRange = (target_height - camera_height) / (Math.tan(Math.toRadians(ty)+camera_angle));
-                double denom = Math.tan(Math.toRadians(camera_angle + ty));
-                telemetry.addData("denom", denom);
+                goalRange = (target_height - camera_height) / (Math.tan(Math.toRadians(ty)+camera_angle)) + 27; //added const.
 
                 isDataCurrent = true;
 

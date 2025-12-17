@@ -77,6 +77,7 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean leftIsRunning;
     private boolean rightIsRunning;
     private boolean emergencyMode = false;
+    private boolean slowChildMode = false;
 
     @Override
     public void init() {
@@ -124,13 +125,15 @@ public class MecanumTeleOp7462 extends OpMode {
         } else if (gamepad1.xWasPressed()) {
             //goalTag.targetAprilTagID = 20;
             limelight.setTeam(20);
+        } else if (gamepad1.rightStickButtonWasPressed()) {
+            slowChildMode = true;
         }
         // remove later
-        else if (gamepad1.yWasPressed()) {
-            kP += 0.01;
-        } else if (gamepad1.aWasPressed()) {
-            kP -= 0.01;
-        }
+//        else if (gamepad1.yWasPressed()) {
+//            kP += 0.01;
+//        } else if (gamepad1.aWasPressed()) {
+//            kP -= 0.01;
+//        }
     }
 
     @Override
@@ -199,7 +202,7 @@ public class MecanumTeleOp7462 extends OpMode {
 //            collectorPower -= 0.05;
 
         // Parking mode
-        if (gamepad1.right_trigger == 1) {
+        if (gamepad1.right_trigger == 1 || slowChildMode) {
             ch.setMaxSpeed(0.5);
         } else {
             ch.setMaxSpeed(1);
