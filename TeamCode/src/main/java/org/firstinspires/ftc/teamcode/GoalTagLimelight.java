@@ -24,6 +24,9 @@ public class GoalTagLimelight {
     public boolean seeObelisk = false;
     private double tx;
     private double ty;
+    private double x;
+    private double y;
+
     private double camera_height = 15.625; // in
     private double target_height = 29.5; // in
     private double camera_angle = 0.04009; // radians old was 0.0418
@@ -69,6 +72,9 @@ public class GoalTagLimelight {
                 seeObelisk = true;
             }
         }
+        for (LLResultTypes.FiducialResult fiducial : fiducials) {
+            teamID = fiducial.getFiducialId();
+        }
     }
     public void process(Telemetry telemetry) {
         LLResult result = limelight.getLatestResult();
@@ -79,9 +85,9 @@ public class GoalTagLimelight {
             double ta = result.getTa(); // How big the target looks (0%-100% of the image)
             Pose3D botpose = result.getBotpose();
             if (botpose != null) {
-                double x = botpose.getPosition().x;
+                x = botpose.getPosition().x;
                 telemetry.addData("botx", x);
-                double y = botpose.getPosition().y;
+                y = botpose.getPosition().y;
                 telemetry.addData("boty", y);
 
                 goalYaw = botpose.getOrientation().getYaw();
@@ -125,6 +131,17 @@ public class GoalTagLimelight {
         } else {
             return "No Tag Detected";
         }
+    }
+    public int getTeam() {
+      return teamID;
+    }
+    public double getX()
+    {
+        return x;
+    }
+    public double getY()
+    {
+        return y;
     }
     public double getRange() {
         return goalRange;
