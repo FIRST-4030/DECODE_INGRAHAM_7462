@@ -99,7 +99,7 @@ public class FarAuto extends LinearOpMode {
         timer2.reset();
         do {
             while (timer2.seconds() < 0.25) {
-                limelight.setTeam();
+                limelight.setTeam(true);
                 limelight.processRobotPose();
                 telemetry.addData("x", limelight.getX());
                 telemetry.addData("y", limelight.getY());

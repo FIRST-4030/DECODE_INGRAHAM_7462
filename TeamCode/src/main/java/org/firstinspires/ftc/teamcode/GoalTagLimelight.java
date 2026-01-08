@@ -130,13 +130,22 @@ public class GoalTagLimelight {
         }
     }
 
-    public void setTeam() {
+    public void setTeam(boolean far) {
         limelight.pipelineSwitch(7); // Show both goals
         LLResult result = limelight.getLatestResult();
 
         List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
         for (LLResultTypes.FiducialResult fiducial : fiducials) {
-            teamID = fiducial.getFiducialId();
+            if (far) {
+                teamID = fiducial.getFiducialId();
+            } else {
+                if (fiducial.getFiducialId() == 20) {
+                    teamID = 24;
+                } else if (fiducial.getFiducialId() == 24) {
+                    teamID = 20;
+                }
+            }
+
         }
     }
     public void setTeamID() {

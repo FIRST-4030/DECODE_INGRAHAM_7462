@@ -44,6 +44,7 @@ public class CloseAuto extends LinearOpMode {
     double line1Y = 83.232;
     int angleOffset = 0;
     ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer2 = new ElapsedTime();
     public PathChain MOVETOLAUNCH;
     public PathChain MOVETOCOLLECT;
     public PathChain COLLECT11;
@@ -51,6 +52,7 @@ public class CloseAuto extends LinearOpMode {
     public PathChain COLLECT13;
     public PathChain MOVETOLAUNCH2;
     public PathChain ENDOFFLINE;
+    private boolean ran = false;
 
     @Override
     public void runOpMode() {
@@ -85,7 +87,17 @@ public class CloseAuto extends LinearOpMode {
         GlobalStorage.setPattern(null);
         GlobalStorage.setAlliance(-1);
 
+        timer2.reset();
         do {
+            while (timer2.seconds() < 0.25) {
+                limelight.setTeam(false);
+                limelight.processRobotPose();
+                telemetry.addData("x", limelight.getX());
+                telemetry.addData("y", limelight.getY());
+                telemetry.addData("team ID", limelight.getTeam());
+                telemetry.addData("pipeline", limelight.getPipeline());
+                telemetry.update();
+            }
             limelight.readObelisk(telemetry);
             GlobalStorage.setPattern(limelight.getObelisk());
 
@@ -121,12 +133,27 @@ public class CloseAuto extends LinearOpMode {
             } else if (gamepad1.leftStickButtonWasPressed()) {
                 testingMode = true;
             }
+            if (limelight.getTeam() == 24 && !ran) {
+                angleOffset = 0;
+                autoPoses.build(0,1,line1Y, angleOffset);
+                follower.setStartingPose(autoPoses.startPose);
+                buildPaths();
+                GlobalStorage.setAlliance(24);
+                ran = true;
+            } else if (limelight.getTeam() == 20 && !ran) {
+                angleOffset = 180;
+                autoPoses.build(99.07,-1,line1Y, angleOffset);
+                follower.setStartingPose(autoPoses.startPose);
+                buildPaths();
+                GlobalStorage.setAlliance(20);
+                ran = true;
+            }
 
         } while (opModeInInit());
         waitForStart();
         //sleep(1000*startDelay);
         setPathState(0);
-        limelight.setTeam();
+        limelight.setTeamID();
 
         collectorBack.setPower(Shooter.collectorPower);
         collectorFront.setPower(Shooter.collectorPower);
