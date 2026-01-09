@@ -78,8 +78,8 @@ public class Shooter {
         double velLeft = 0;
         while (timer.seconds() < 0.25) {
             limelight.process(telemetry);
-            velLeft = 26.2 - 0.0381*limelight.getRange() + 0.000915*limelight.getRange()*limelight.getRange();
-            velRight = 26.2 - 0.0381*limelight.getRange() + 0.000915*limelight.getRange()*limelight.getRange();
+            velLeft = shooterLeft.getShooterVelo(limelight);
+            velRight = shooterRight.getShooterVelo(limelight);
 //            velLeft = (limelight.getRange()+100.99)/7.3712;
 //            velRight = (limelight.getRange()+100.99)/7.3712;
         }
@@ -142,4 +142,15 @@ public class Shooter {
             shooterRight.overridePower();
         }
     }
+    public double getShooterVelo(GoalTagLimelight limelight) {
+        // compute velocity from range using function based on shooting experiments
+        double range = limelight.getRange();
+        double poly = (limelight.getRange()+100.99)/7.3712;
+                //26.2 - 0.0381*range + 0.000915*range*range; // 2nd order polynomial
+        return poly;
+
+
+        //return (limelight.getRange() + 202.17 - 10) / 8.92124; // older function
+    }
+
 }

@@ -30,9 +30,9 @@ public class GoalTagLimelight {
     private double x;
     private double y;
 
-    private double camera_height = 15.625; // in
+    private double camera_height = 16.4; // in
     private double target_height = 29.5; // in
-    private double camera_angle = 0.04009; // radians old was 0.0418
+    private double camera_angle = 0.032; // radians old was 0.0418
 
     public boolean isDataCurrent;
     IMU imu;
@@ -110,7 +110,7 @@ public class GoalTagLimelight {
 //                telemetry.addData("boty", y);
 
                 goalYaw = botPose.getOrientation().getYaw();
-                goalRange = (target_height - camera_height) / (Math.tan(Math.toRadians(ty)+camera_angle)) + 27; //added const.
+                goalRange = (target_height - camera_height) / (Math.tan(Math.toRadians(ty)+camera_angle));
 
                 isDataCurrent = true;
 
