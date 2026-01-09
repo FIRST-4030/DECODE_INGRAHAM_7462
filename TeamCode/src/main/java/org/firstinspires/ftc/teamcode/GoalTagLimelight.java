@@ -19,7 +19,7 @@ public class GoalTagLimelight {
     private double goalYaw; // inches
     private double goalRange; // in
 
-    private int teamID;
+    public int teamID;
 
     public boolean GPP = false; // id 21
     public boolean PGP = false; // id 22

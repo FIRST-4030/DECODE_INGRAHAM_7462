@@ -78,8 +78,10 @@ public class Shooter {
         double velLeft = 0;
         while (timer.seconds() < 0.25) {
             limelight.process(telemetry);
-            velLeft = (limelight.getRange()+100.99)/7.3712;
-            velRight = (limelight.getRange()+100.99)/7.3712;
+            velLeft = 26.2 - 0.0381*limelight.getRange() + 0.000915*limelight.getRange()*limelight.getRange();
+            velRight = 26.2 - 0.0381*limelight.getRange() + 0.000915*limelight.getRange()*limelight.getRange();
+//            velLeft = (limelight.getRange()+100.99)/7.3712;
+//            velRight = (limelight.getRange()+100.99)/7.3712;
         }
         if (limelight.getObelisk().equals("PGP")) {
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);

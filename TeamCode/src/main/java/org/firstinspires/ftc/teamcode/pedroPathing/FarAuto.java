@@ -239,7 +239,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line13, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-70)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-60)))
                 .build();
 
         PREPARETOCOLLECT2 = follower
@@ -279,7 +279,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line23, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-70)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-60)))
                 .build();
 
         ENDOFFLINE = follower
@@ -385,9 +385,9 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 11:
                 if (!follower.isBusy()) {
-                    if (!testingMode) {
-                        Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
-                    }
+//                    if (!testingMode) {
+//                        Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
+//                    }
                     follower.followPath(ENDOFFLINE, Shooter.maxPower, true);
                     setPathState(12);
                 }
