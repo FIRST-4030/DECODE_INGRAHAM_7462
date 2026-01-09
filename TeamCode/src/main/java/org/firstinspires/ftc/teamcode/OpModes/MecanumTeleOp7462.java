@@ -213,7 +213,19 @@ public class MecanumTeleOp7462 extends OpMode {
             ch.setMaxSpeed(1);
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-
+//        if (gamepad1.yWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
+//            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+//            shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+//            leftIsRunning = true;
+//            rightIsRunning = true;
+//            timerLeft.reset();
+//            timerRight.reset();
+//            flipper.setPosition(1);
+//            timerFlipper.reset();
+//            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+//            timerLeft.reset();
+//            leftIsRunning = true;
+//        }
         // Shoot when at speed
         if (leftIsRunning) {
             if (shooterLeft.atSpeed()) {
