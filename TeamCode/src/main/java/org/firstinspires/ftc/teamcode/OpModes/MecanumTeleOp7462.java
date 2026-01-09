@@ -122,10 +122,12 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.update();
         if (gamepad1.bWasPressed()) {
 //            goalTag.targetAprilTagID = 24;
-            limelight.setPipeline(24);
+            limelight.teamID = 24;
+            limelight.setTeamID();
         } else if (gamepad1.xWasPressed()) {
             //goalTag.targetAprilTagID = 20;
-            limelight.setPipeline(20);
+            limelight.teamID = 20;
+            limelight.setTeamID();
         } else if (gamepad1.rightStickButtonWasPressed()) {
             slowChildMode = true;
         }
@@ -166,14 +168,16 @@ public class MecanumTeleOp7462 extends OpMode {
         if (gamepad1.leftBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
             // do math here
             //shooterLeft.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
-            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+            //shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+            shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
             leftIsRunning = true;
             timerLeft.reset();
         }
         if (gamepad1.rightBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
             // do math here
             //shooterRight.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
-            shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+            //shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+            shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
             rightIsRunning = true;
             timerRight.reset();
         }
