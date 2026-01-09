@@ -100,7 +100,7 @@ public class FarAuto extends LinearOpMode {
         do {
             while (timer2.seconds() < 0.25) {
                 limelight.setTeam(true);
-                limelight.processRobotPose();
+                limelight.processRobotPose(telemetry);
                 telemetry.addData("x", limelight.getX());
                 telemetry.addData("y", limelight.getY());
                 telemetry.addData("team ID", limelight.getTeam());
@@ -176,7 +176,7 @@ public class FarAuto extends LinearOpMode {
         launchFlapRight.setPosition(0.4);
 
         while (opModeIsActive()) {
-            limelight.processRobotPose();
+            limelight.processRobotPose(telemetry);
             follower.update(); // Update Pedro Pathing
             pathState = autonomousPathUpdate(); // Update autonomous state machine
 
@@ -239,7 +239,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line13, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-70)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-60)))
                 .build();
 
         PREPARETOCOLLECT2 = follower
@@ -287,7 +287,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.endOffLine)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(Math.toRadians(Math.abs(angleOffset-70))))
+                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-70)))
                 .build();
     }
     public int autonomousPathUpdate() {

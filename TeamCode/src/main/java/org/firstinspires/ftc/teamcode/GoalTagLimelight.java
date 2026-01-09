@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.PedroCoordinates;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -8,6 +12,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -82,14 +89,17 @@ public class GoalTagLimelight {
             }
         }
     }
-    public void processRobotPose() {
+    public void processRobotPose(Telemetry telemetry) {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         limelight.updateRobotOrientation(orientation.getYaw());
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
             Pose3D botPose = result.getBotpose_MT2();
-            x = botPose.getPosition().x + 72;
-            y = botPose.getPosition().y + 72;
+            x = botPose.getPosition().x;
+            y = botPose.getPosition().y;
+            double heading = botPose.getOrientation().getYaw(AngleUnit.DEGREES);
+            Pose pedroPose = PoseConverter.pose2DToPose(new Pose2D(DistanceUnit.METER, x, y, AngleUnit.DEGREES, heading), InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+            telemetry.addData("Pose", pedroPose);
         }
     }
 

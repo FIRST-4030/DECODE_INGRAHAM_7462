@@ -22,7 +22,7 @@ public class Shooter {
 
     public double targetVelocity = 0;  // rotations per second (max is ~40)
     public static double collectorPower = 0.53;
-    public static double maxPower = 1;
+    public static double maxPower = 0.5;
 
     public Shooter(HardwareMap hardwareMap, String name, Boolean dir) {
         shooter = (DcMotorEx) hardwareMap.get(DcMotor.class, name);
