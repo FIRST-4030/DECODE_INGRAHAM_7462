@@ -123,9 +123,11 @@ public class MecanumTeleOp7462 extends OpMode {
         if (gamepad1.bWasPressed()) {
 //            goalTag.targetAprilTagID = 24;
             limelight.setPipeline(24);
+            limelight.setTeamID();
         } else if (gamepad1.xWasPressed()) {
             //goalTag.targetAprilTagID = 20;
             limelight.setPipeline(20);
+            limelight.setTeamID();
         } else if (gamepad1.rightStickButtonWasPressed()) {
             slowChildMode = true;
         }
@@ -177,6 +179,19 @@ public class MecanumTeleOp7462 extends OpMode {
             rightIsRunning = true;
             timerRight.reset();
         }
+        //        if (gamepad1.yWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
+//            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+//            shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+//            leftIsRunning = true;
+//            rightIsRunning = true;
+//            timerLeft.reset();
+//            timerRight.reset();
+//            flipper.setPosition(1);
+//            timerFlipper.reset();
+//            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
+//            timerLeft.reset();
+//            leftIsRunning = true;
+//        }
         if (gamepad2.dpadLeftWasPressed()) {
             flipper.setPosition(1);
             timerFlipper.reset();

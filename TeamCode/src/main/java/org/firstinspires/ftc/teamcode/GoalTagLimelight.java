@@ -147,7 +147,7 @@ public class GoalTagLimelight {
         }
     }
     public void setPipeline(int id) {
-        limelight.pipelineSwitch(id);
+        //limelight.pipelineSwitch(id);
         teamID = id;
     }
     public String getObelisk() {

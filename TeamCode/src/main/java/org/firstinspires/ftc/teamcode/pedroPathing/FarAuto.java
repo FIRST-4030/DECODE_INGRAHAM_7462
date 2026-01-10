@@ -98,9 +98,9 @@ public class FarAuto extends LinearOpMode {
 
         timer2.reset();
         do {
-            while (timer2.seconds() < 0.25) {
+            while (timer2.seconds() < 3) {
                 limelight.setTeam();
-                limelight.processRobotPose();
+                //limelight.processRobotPose();
                 telemetry.addData("x", limelight.getX());
                 telemetry.addData("y", limelight.getY());
                 telemetry.addData("team ID", limelight.getTeam());
@@ -125,6 +125,7 @@ public class FarAuto extends LinearOpMode {
             if (gamepad1.bWasPressed()) {
                 //goalTag.targetAprilTagID = 24;
                 teamID = 24;
+                limelight.setPipeline(24);
                 angleOffset = 0;
                 autoPoses.build(0,1,line1Y,line2Y);
                 follower.setStartingPose(autoPoses.startPose);
@@ -134,6 +135,7 @@ public class FarAuto extends LinearOpMode {
                 //goalTag.targetAprilTagID = 20;
                 teamID = 20;
                 angleOffset = 180;
+                limelight.setPipeline(20);
                 autoPoses.build(20,-1,line1Y,line2Y);
                 follower.setStartingPose(autoPoses.startPose);
                 buildPaths();
@@ -239,7 +241,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line13, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-70)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-60)))
                 .build();
 
         PREPARETOCOLLECT2 = follower
@@ -287,7 +289,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.endOffLine)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(Math.toRadians(Math.abs(angleOffset-70))))
+                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-70)))
                 .build();
     }
     public int autonomousPathUpdate() {

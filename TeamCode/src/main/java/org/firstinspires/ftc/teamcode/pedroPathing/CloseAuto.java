@@ -180,13 +180,13 @@ public class CloseAuto extends LinearOpMode {
         MOVETOLAUNCH2 = follower
                 .pathBuilder()
                 .addPath(new BezierLine(autoPoses.line13, autoPoses.launchPose))
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.abs(angleOffset-45))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-45)))
                 .build();
 
         ENDOFFLINE = follower
                 .pathBuilder()
                 .addPath(new BezierLine(autoPoses.launchPose, autoPoses.endOffLine))
-                .setLinearHeadingInterpolation(Math.abs(angleOffset-45), Math.toRadians(270))
+                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-45)), Math.toRadians(270))
                 .build();
     }
         public int autonomousPathUpdate() {
