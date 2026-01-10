@@ -77,6 +77,7 @@ public class MecanumTeleOp7462 extends OpMode {
     private double kP = 0.3; // was 0.14 before adding 0 breaking
     private boolean leftIsRunning;
     private boolean rightIsRunning;
+    private boolean shootSequence;
     private boolean emergencyMode = false;
     private boolean slowChildMode = false;
 
@@ -101,7 +102,7 @@ public class MecanumTeleOp7462 extends OpMode {
         limelight.init(hardwareMap, telemetry);
 
         if ((GlobalStorage.getAlliance() != -1)) {
-            limelight.setPipeline(GlobalStorage.getAlliance());
+            limelight.teamID = GlobalStorage.getAlliance();
         }
         timerLeft.reset();
         timerRight.reset();
@@ -213,19 +214,26 @@ public class MecanumTeleOp7462 extends OpMode {
             ch.setMaxSpeed(1);
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-//        if (gamepad1.yWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
-//            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
-//            shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
-//            leftIsRunning = true;
-//            rightIsRunning = true;
-//            timerLeft.reset();
-//            timerRight.reset();
-//            flipper.setPosition(1);
-//            timerFlipper.reset();
-//            shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
-//            timerLeft.reset();
-//            leftIsRunning = true;
-//        }
+        if (gamepad1.yWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
+            shootSequence = true;
+        }
+        if (shootSequence) {
+            ElapsedTime timer = new ElapsedTime();
+            shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
+            shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
+            leftIsRunning = true;
+            rightIsRunning = true;
+            timerLeft.reset();
+            timerRight.reset();
+            if (timer.seconds() > 3) {
+                flipper.setPosition(1);
+                timerFlipper.reset();
+                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
+                timerLeft.reset();
+                leftIsRunning = true;
+                shootSequence = false;
+            }
+        }
         // Shoot when at speed
         if (leftIsRunning) {
             if (shooterLeft.atSpeed()) {
@@ -237,16 +245,16 @@ public class MecanumTeleOp7462 extends OpMode {
         if (rightIsRunning) {
             if (shooterRight.atSpeed()) {
                 timerRight.reset();
-                launchFlapRight.setPosition(0.7);
+                launchFlapRight.setPosition(0.8);
                 rightIsRunning = false;
             }
         }
         // Servo Reset
-        if (timerLeft.seconds() > 0.5 && !leftIsRunning) {
+        if (timerLeft.seconds() > 0.6 && !leftIsRunning) {
             launchFlapLeft.setPosition(0.3);
             shooterLeft.targetVelocity = idlePower;
         }
-        if (timerRight.seconds() > 0.5 && !rightIsRunning) {
+        if (timerRight.seconds() > 0.6 && !rightIsRunning) {
             launchFlapRight.setPosition(0.4);
             shooterRight.targetVelocity = idlePower;
         }

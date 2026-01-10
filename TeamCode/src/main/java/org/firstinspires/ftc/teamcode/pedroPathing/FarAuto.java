@@ -41,7 +41,6 @@ public class FarAuto extends LinearOpMode {
     GoalTagLimelight limelight;
 
     private int startDelay = 0;
-    private int teamID;
     private boolean testingMode = false;
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime timer2 = new ElapsedTime();
@@ -62,9 +61,9 @@ public class FarAuto extends LinearOpMode {
     public PathChain MOVETOLAUNCH3;
     public PathChain ENDOFFLINE;
 
-    private boolean ran = false;
     final double line1Y = 35.478;
     final double line2Y = 59.340;
+    private boolean ran = false;
 
     @Override
     public void runOpMode() {
@@ -95,10 +94,9 @@ public class FarAuto extends LinearOpMode {
         limelight = new GoalTagLimelight();
         limelight.init(hardwareMap,telemetry);
 
-
         timer2.reset();
         do {
-            while (timer2.seconds() < 0.25) {
+            while (timer2.seconds() < 3) {
                 limelight.setTeam(true);
                 limelight.processRobotPose(telemetry);
                 telemetry.addData("x", limelight.getX());
@@ -123,16 +121,14 @@ public class FarAuto extends LinearOpMode {
             telemetry.update();
 
             if (gamepad1.bWasPressed()) {
-                //goalTag.targetAprilTagID = 24;
-                teamID = 24;
+                limelight.teamID = 24;
                 angleOffset = 0;
                 autoPoses.build(0,1,line1Y,line2Y);
                 follower.setStartingPose(autoPoses.startPose);
                 buildPaths();
                 GlobalStorage.setAlliance(24);
             } else if (gamepad1.xWasPressed()) {
-                //goalTag.targetAprilTagID = 20;
-                teamID = 20;
+                limelight.teamID = 20;
                 angleOffset = 180;
                 autoPoses.build(20,-1,line1Y,line2Y);
                 follower.setStartingPose(autoPoses.startPose);
@@ -146,14 +142,13 @@ public class FarAuto extends LinearOpMode {
                 testingMode = true;
             }
 
-
             if (limelight.getTeam() == 24 && !ran) {
                 angleOffset = 0;
                 autoPoses.build(0,1,line1Y,line2Y);
                 follower.setStartingPose(autoPoses.startPose);
                 buildPaths();
-                GlobalStorage.setAlliance(24);
                 ran = true;
+                GlobalStorage.setAlliance(24);
             } else if (limelight.getTeam() == 20 && !ran) {
                 angleOffset = 180;
                 autoPoses.build(20,-1,line1Y,line2Y);
@@ -165,7 +160,7 @@ public class FarAuto extends LinearOpMode {
         } while (opModeInInit());
 
         waitForStart();
-        //sleep(1000*startDelay);
+        sleep(1000*startDelay);
         setPathState(0);
         limelight.setTeamID();
 
@@ -199,7 +194,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.startPose, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(Math.abs(angleOffset-70)))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(Math.abs(angleOffset-71)))
                 .build();
 
         PREPARETOCOLLECT1 = follower
@@ -207,7 +202,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.readyPickUp1)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-70)), Math.toRadians(angleOffset))
+                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-71)), Math.toRadians(angleOffset))
                 .build();
 
         COLLECT11 = follower
@@ -239,7 +234,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line13, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-60)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-65)))
                 .build();
 
         PREPARETOCOLLECT2 = follower
@@ -247,7 +242,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.readyPickUp2)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-70)), Math.toRadians(angleOffset))
+                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-65)), Math.toRadians(angleOffset))
                 .build();
 
         COLLECT21 = follower
@@ -279,7 +274,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line23, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-60)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-65)))
                 .build();
 
         ENDOFFLINE = follower
@@ -287,7 +282,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.endOffLine)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-70)))
+                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-65)))
                 .build();
     }
     public int autonomousPathUpdate() {
@@ -314,7 +309,7 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(1);
+                    flipper.setPosition(0);
                     if (timer.seconds() > 0.8) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT12, Shooter.maxPower, true);
@@ -325,7 +320,7 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(0);
+                    flipper.setPosition(1);
                     if (timer.seconds() > 0.8) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT13, Shooter.maxPower, true);
@@ -385,9 +380,9 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 11:
                 if (!follower.isBusy()) {
-//                    if (!testingMode) {
-//                        Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
-//                    }
+                    if (!testingMode) {
+                        Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
+                    }
                     follower.followPath(ENDOFFLINE, Shooter.maxPower, true);
                     setPathState(12);
                 }

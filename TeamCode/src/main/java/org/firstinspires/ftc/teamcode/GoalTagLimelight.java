@@ -53,7 +53,7 @@ public class GoalTagLimelight {
         imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
-        telemetry.setMsTransmissionInterval(11);
+        telemetry.setMsTransmissionInterval(50);
         limelight.start(); // This tells Limelight to start looking!
     }
 
@@ -97,7 +97,7 @@ public class GoalTagLimelight {
             Pose3D botPose = result.getBotpose_MT2();
             x = botPose.getPosition().x;
             y = botPose.getPosition().y;
-            double heading = botPose.getOrientation().getYaw(AngleUnit.DEGREES);
+            double heading = botPose.getOrientation().getYaw(AngleUnit.RADIANS);
             Pose pedroPose = PoseConverter.pose2DToPose(new Pose2D(DistanceUnit.METER, x, y, AngleUnit.DEGREES, heading), InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
             telemetry.addData("Pose", pedroPose);
         }

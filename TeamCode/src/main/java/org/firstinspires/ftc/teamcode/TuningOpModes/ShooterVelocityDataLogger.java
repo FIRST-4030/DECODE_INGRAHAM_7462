@@ -20,7 +20,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @TeleOp(name = "ShooterDataLogger")
 public class ShooterVelocityDataLogger extends OpMode {
 
-    private Servo launchFlapLeft;
+    Servo launchFlapLeft;
+    Servo launchFlapRight;
     GoalTagLimelight limelight;
     private double initPos = 0.5;
 
@@ -47,9 +48,13 @@ public class ShooterVelocityDataLogger extends OpMode {
         //shooter = hardwareMap.get(DcMotorEx.class, "shooter");
         shooterLeft = new Shooter(hardwareMap, "shooterLeft", true);
         shooterLeft.setControllerValues(0.3, 0.0243);
+
+        shooterRight = new Shooter(hardwareMap, "shooterRight", false);
+        shooterRight.setControllerValues(0.3, 0.0243);
         ch = new Chassis(hardwareMap);
 
         launchFlapLeft = hardwareMap.get(Servo.class, "launchFlapLeft");
+        launchFlapRight = hardwareMap.get(Servo.class, "launchFlapRight");
         //launchFlapRight = hardwareMap.get(Servo.class, "launchFlapRight");
 
         limelight = new GoalTagLimelight();
@@ -67,25 +72,28 @@ public class ShooterVelocityDataLogger extends OpMode {
     public void init_loop() {
         if (gamepad1.bWasPressed()) {
 //            goalTag.targetAprilTagID = 24;
-            limelight.setPipeline(24);
+            limelight.teamID = 24;
+            limelight.setTeamID();
         } else if (gamepad1.xWasPressed()) {
-            //goalTag.targetAprilTagID = 20;
-            limelight.setPipeline(20);
+            limelight.teamID = 20;
+            limelight.setTeamID();
         }
         telemetry.addData("Pattern", limelight.getObelisk());
         telemetry.addData("team ID", limelight.getID());
         telemetry.update();
+        shooterLeft.targetVelocity = 26;
+        shooterRight.targetVelocity = 26;
     }
     public void loop() {
         i++;
         k++;
         shooterLeft.overridePower();
+        shooterRight.overridePower();
 
         limelight.process(telemetry);
-        goalRange = limelight.getRange();
-        goalBearing = limelight.getTx();
-        double targetVelocity = shooterLeft.targetVelocity;
 
+        goalRange = limelight.getRange();
+        double targetVelocity = shooterLeft.targetVelocity;
 
         if (gamepad1.leftBumperWasPressed()) {
             goal = true;
@@ -109,16 +117,26 @@ public class ShooterVelocityDataLogger extends OpMode {
             AimTestDatalog.writeLine();
         } else if (gamepad1.yWasPressed()) {
             shooterLeft.targetVelocity += 0.5;
+            shooterRight.targetVelocity += 0.5;
         } else if (gamepad1.aWasPressed()) {
             shooterLeft.targetVelocity -= 0.5;
-        } else if (gamepad1.right_trigger == 1) {
+            shooterRight.targetVelocity -= 0.5;
+        } else if (gamepad1.left_trigger == 1) {
             launchFlapLeft.setPosition(0);
             i = 0;
             readyToShoot = false;
+        } else if (gamepad1.right_trigger == 1) {
+            launchFlapRight.setPosition(0.7);
+            k = 0;
+            readyToShoot = false;
         }
         if (i > 500) {
-            launchFlapLeft.setPosition(initPos);
+            launchFlapLeft.setPosition(0.3);
             i = 0;
+        }
+        if (k > 500) {
+            launchFlapRight.setPosition(0.4);
+            k = 0;
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         if (gamepad1.b && limelight.isDataCurrent) {

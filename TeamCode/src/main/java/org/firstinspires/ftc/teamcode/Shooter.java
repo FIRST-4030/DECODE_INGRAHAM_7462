@@ -22,7 +22,7 @@ public class Shooter {
 
     public double targetVelocity = 0;  // rotations per second (max is ~40)
     public static double collectorPower = 0.53;
-    public static double maxPower = 0.5;
+    public static double maxPower = 1;
 
     public Shooter(HardwareMap hardwareMap, String name, Boolean dir) {
         shooter = (DcMotorEx) hardwareMap.get(DcMotor.class, name);
@@ -76,33 +76,29 @@ public class Shooter {
         timer.reset();
         double velRight = 0;
         double velLeft = 0;
-        while (timer.seconds() < 0.25) {
+        while (timer.seconds() < 0.1) {
             limelight.process(telemetry);
             velLeft = shooterLeft.getShooterVelo(limelight);
             velRight = shooterRight.getShooterVelo(limelight);
-//            velLeft = (limelight.getRange()+100.99)/7.3712;
-//            velRight = (limelight.getRange()+100.99)/7.3712;
         }
         if (limelight.getObelisk().equals("PGP")) {
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             fireShooterRight(velRight, shooterRight, launchFlapRight);
             flipper.setPosition(1);
-            opMode.sleep(1000);
+            opMode.sleep(500);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             flipper.setPosition(0.525);
         } else if (limelight.getObelisk().equals("GPP")) {
             fireShooterRight(velRight, shooterRight, launchFlapRight);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
-            opMode.sleep(1000);
             flipper.setPosition(1);
-            opMode.sleep(1000);
+            opMode.sleep(500);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             flipper.setPosition(0.525);
         } else if (limelight.getObelisk().equals("PPG")) {
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
-            opMode.sleep(1000);
             flipper.setPosition(1);
-            opMode.sleep(1000);
+            opMode.sleep(500);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             fireShooterRight(velRight, shooterRight, launchFlapRight);
             flipper.setPosition(0.525);
@@ -117,7 +113,7 @@ public class Shooter {
         }
         timer.reset();
         launchFlapLeft.setPosition(0);
-        while (timer.seconds() < 0.5) {
+        while (timer.seconds() < 0.6) {
             shooterLeft.overridePower();
         }
         launchFlapLeft.setPosition(0.3);
@@ -133,8 +129,8 @@ public class Shooter {
             shooterRight.overridePower();
         }
         timer.reset();
-        launchFlapRight.setPosition(0.7);
-        while (timer.seconds() < 0.5) {
+        launchFlapRight.setPosition(0.8);
+        while (timer.seconds() < 0.6) {
             shooterRight.overridePower();
         }
         launchFlapRight.setPosition(0.4);
@@ -145,11 +141,14 @@ public class Shooter {
     public double getShooterVelo(GoalTagLimelight limelight) {
         // compute velocity from range using function based on shooting experiments
         double range = limelight.getRange();
-        double poly = (limelight.getRange()+100.99)/7.3712;
-                //26.2 - 0.0381*range + 0.000915*range*range; // 2nd order polynomial
-        return poly;
-
-
+        if (range < 80) {
+            double poly = 29;
+            return poly;
+        } else {
+            double poly = 19 + 0.125*range;
+            return poly;
+        }
+        //26.2 - 0.0381*range + 0.000915*range*range; // 2nd order polynomial
         //return (limelight.getRange() + 202.17 - 10) / 8.92124; // older function
     }
 

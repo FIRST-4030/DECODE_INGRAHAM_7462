@@ -39,7 +39,6 @@ public class CloseAuto extends LinearOpMode {
     Poses autoPoses = new Poses();
 
     private int startDelay = 0;
-    private int teamID;
     private boolean testingMode = false;
     double line1Y = 83.232;
     int angleOffset = 0;
@@ -103,7 +102,7 @@ public class CloseAuto extends LinearOpMode {
 
             telemetry.addData("Pattern", limelight.getObelisk());
             telemetry.addData("Is Tag Recent", limelight.seeObelisk);
-            telemetry.addData("team ID", teamID);
+            telemetry.addData("team ID", limelight.getTeam());
             telemetry.addData("Testing Mode", testingMode);
             telemetry.addLine("Press b for red, x for blue, y adds delay, a removes delay");
             telemetry.addData("Start Delay", startDelay);
@@ -112,7 +111,7 @@ public class CloseAuto extends LinearOpMode {
 
             if (gamepad1.bWasPressed()) {
                 //goalTag.targetAprilTagID = 24;
-                teamID = 24;
+                limelight.teamID = 24;
                 angleOffset = 0;
                 autoPoses.build(0,1,line1Y, angleOffset);
                 follower.setStartingPose(autoPoses.startPose);
@@ -120,7 +119,7 @@ public class CloseAuto extends LinearOpMode {
                 GlobalStorage.setAlliance(24);
             } else if (gamepad1.xWasPressed()) {
                 //goalTag.targetAprilTagID = 20;
-                teamID = 20;
+                limelight.teamID = 20;
                 angleOffset = 180;
                 autoPoses.build(99.07,-1,line1Y, angleOffset);
                 follower.setStartingPose(autoPoses.startPose);
@@ -151,7 +150,7 @@ public class CloseAuto extends LinearOpMode {
 
         } while (opModeInInit());
         waitForStart();
-        //sleep(1000*startDelay);
+        sleep(1000*startDelay);
         setPathState(0);
         limelight.setTeamID();
 
