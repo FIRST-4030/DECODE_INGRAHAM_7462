@@ -112,11 +112,11 @@ public class Shooter {
             shooterLeft.overridePower();
         }
         timer.reset();
-        launchFlapLeft.setPosition(0);
+        launchFlapLeft.setPosition(Constants.leftFlapUp);
         while (timer.seconds() < 0.6) {
             shooterLeft.overridePower();
         }
-        launchFlapLeft.setPosition(0.3);
+        launchFlapLeft.setPosition(Constants.leftFlapDown);
         while (timer.seconds() < 1) {
             shooterLeft.overridePower();
         }
@@ -129,11 +129,11 @@ public class Shooter {
             shooterRight.overridePower();
         }
         timer.reset();
-        launchFlapRight.setPosition(0.8);
+        launchFlapRight.setPosition(Constants.rightFlapUp);
         while (timer.seconds() < 0.6) {
             shooterRight.overridePower();
         }
-        launchFlapRight.setPosition(0.4);
+        launchFlapRight.setPosition(Constants.rightFlapDown);
         while (timer.seconds() < 1) {
             shooterRight.overridePower();
         }

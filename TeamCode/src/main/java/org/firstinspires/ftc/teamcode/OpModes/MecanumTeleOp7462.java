@@ -35,7 +35,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.Chassis;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
 import org.firstinspires.ftc.teamcode.Shooter;
@@ -111,8 +113,6 @@ public class MecanumTeleOp7462 extends OpMode {
 
     }
 
-    //we are using the methods from OpMode and @Override is so that we can write our own stuff for this method
-// Move to auto
     @Override
     public void init_loop() {
         telemetry.addData("Pattern", limelight.getObelisk());
@@ -122,28 +122,20 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addLine("Press b for red, x for blue");
         telemetry.update();
         if (gamepad1.bWasPressed()) {
-//            goalTag.targetAprilTagID = 24;
             limelight.teamID = 24;
             limelight.setTeamID();
         } else if (gamepad1.xWasPressed()) {
-            //goalTag.targetAprilTagID = 20;
             limelight.teamID = 20;
             limelight.setTeamID();
         } else if (gamepad1.rightStickButtonWasPressed()) {
             slowChildMode = true;
         }
-        // remove later
-//        else if (gamepad1.yWasPressed()) {
-//            kP += 0.01;
-//        } else if (gamepad1.aWasPressed()) {
-//            kP -= 0.01;
-//        }
     }
 
     @Override
     public void start() {
-        collectorFront.setPower(0.6);
-        collectorBack.setPower(0.6);
+        collectorFront.setPower(Shooter.collectorPower);
+        collectorBack.setPower(Shooter.collectorPower);
     }
 
     @Override
@@ -164,8 +156,6 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("TimerLeft", timerLeft.seconds());
         telemetry.update();
 
-
-        // Driver Controlstelemetry.addData("Is Tag Recent", limelight.seeObelisk);
         if (gamepad1.leftBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
             // do math here
             //shooterLeft.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
@@ -191,21 +181,16 @@ public class MecanumTeleOp7462 extends OpMode {
             timerFlipper.reset();
         }
         if (gamepad2.dpadUpWasPressed()) {
-            collectorBack.setPower(-0.6);
-            collectorFront.setPower(-0.6);
+            collectorBack.setPower(-Shooter.collectorPower);
+            collectorFront.setPower(-Shooter.collectorPower);
         }
         if (gamepad2.dpadUpWasReleased()) {
-            collectorFront.setPower(0.6);
-            collectorBack.setPower(0.6);
+            collectorFront.setPower(Shooter.collectorPower);
+            collectorBack.setPower(Shooter.collectorPower);
         }
         if (gamepad1.a && limelight.isDataCurrent) {
             ch.turnTo(limelight.getTx(), 0);
         }
-//        if (gamepad2.yWasPressed()) {
-//            collectorPower += 0.05;
-//
-//        } else if (gamepad2.aWasPressed()) {
-//            collectorPower -= 0.05;
 
         // Parking mode
         if (gamepad1.right_trigger == 1 || slowChildMode) {
@@ -238,24 +223,24 @@ public class MecanumTeleOp7462 extends OpMode {
         if (leftIsRunning) {
             if (shooterLeft.atSpeed()) {
                 timerLeft.reset();
-                launchFlapLeft.setPosition(0);
+                launchFlapLeft.setPosition(Constants.leftFlapUp);
                 leftIsRunning = false;
             }
         }
         if (rightIsRunning) {
             if (shooterRight.atSpeed()) {
                 timerRight.reset();
-                launchFlapRight.setPosition(0.8);
+                launchFlapRight.setPosition(Constants.rightFlapUp);
                 rightIsRunning = false;
             }
         }
         // Servo Reset
         if (timerLeft.seconds() > 0.6 && !leftIsRunning) {
-            launchFlapLeft.setPosition(0.3);
+            launchFlapLeft.setPosition(Constants.leftFlapDown);
             shooterLeft.targetVelocity = idlePower;
         }
         if (timerRight.seconds() > 0.6 && !rightIsRunning) {
-            launchFlapRight.setPosition(0.4);
+            launchFlapRight.setPosition(Constants.rightFlapDown);
             shooterRight.targetVelocity = idlePower;
         }
         if (timerFlipper.seconds() > 0.25) {
@@ -269,16 +254,5 @@ public class MecanumTeleOp7462 extends OpMode {
             emergencyMode = true;
         }
     }
-//    public void turnToAprilTagLimelight() {
-//        if (limelight.getRange() < 100) {
-//            turnTo(0.25, 0.5);
-//        } else {
-//            if (limelight.getID() == 20) {
-//                turnTo(0.25, 2);
-//            } else if (limelight.getID() == 24) {
-//                turnTo(0.25, -2);
-//            }
-//        }
-//    }
 
 }

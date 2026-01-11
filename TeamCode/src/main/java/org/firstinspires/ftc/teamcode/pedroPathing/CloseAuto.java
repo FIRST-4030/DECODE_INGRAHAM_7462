@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
@@ -157,8 +158,8 @@ public class CloseAuto extends LinearOpMode {
         collectorBack.setPower(Shooter.collectorPower);
         collectorFront.setPower(Shooter.collectorPower);
 
-        launchFlapLeft.setPosition(0.3);
-        launchFlapRight.setPosition(0.4);
+        launchFlapLeft.setPosition(Constants.leftFlapDown);
+        launchFlapRight.setPosition(Constants.rightFlapDown);
 
         while (opModeIsActive()) {
             follower.update(); // Update Pedro Pathing

@@ -15,6 +15,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
+    public static final double leftFlapUp = 0.0;
+    public static final double leftFlapDown = 0.3;
+    public static final double rightFlapUp = 0.8;
+    public static final double rightFlapDown = 0.4;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(11.832)  // Kg
             .forwardZeroPowerAcceleration(-40.13388889162883)
