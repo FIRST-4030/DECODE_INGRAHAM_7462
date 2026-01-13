@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Datalogger;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
 import org.firstinspires.ftc.teamcode.Shooter;
@@ -39,6 +40,7 @@ public class FarAuto extends LinearOpMode {
     Shooter collectorFront;
     Servo flipper;
     GoalTagLimelight limelight;
+    Datalog datalogFar;
 
     private int startDelay = 0;
     private boolean testingMode = false;
@@ -64,6 +66,8 @@ public class FarAuto extends LinearOpMode {
     final double line1Y = 35.478;
     final double line2Y = 59.340;
     private boolean ran = false;
+    ElapsedTime runtime = new ElapsedTime();
+    boolean logDataFar = false;
 
     @Override
     public void runOpMode() {
@@ -141,6 +145,9 @@ public class FarAuto extends LinearOpMode {
             } else if (gamepad1.leftStickButtonWasPressed()) {
                 testingMode = true;
             }
+         else if (gamepad1.rightStickButtonWasPressed()) {
+            logDataFar = true;
+        }
 
             if (limelight.getTeam() == 24 && !ran) {
                 angleOffset = 0;
@@ -158,6 +165,10 @@ public class FarAuto extends LinearOpMode {
                 ran = true;
             }
         } while (opModeInInit());
+
+        if (logDataFar) {
+            datalogFar = new FarAuto.Datalog("FarAuto");
+        }
 
         waitForStart();
         sleep(1000*startDelay);
@@ -426,5 +437,49 @@ public class FarAuto extends LinearOpMode {
             endOffLine = new Pose(startPose.getX()+10*sign, 26);
         }
     }
+    private void logOneSample(Pose pose) {
+        datalogFar.runTime.set(runtime.seconds());
+        datalogFar.xPose.set(pose.getX());
+        datalogFar.yPose.set(pose.getY());
+        datalogFar.heading.set(pose.getHeading());
+        datalogFar.tx.set(limelight.getTx());
+        datalogFar.ty.set(limelight.getTy());
+        datalogFar.writeLine();
+    }
+    public static class Datalog {
+        /*
+         * The underlying datalogger object - it cares only about an array of loggable fields
+         */
+        private final Datalogger datalogger;
+        /*
+         * These are all of the fields that we want in the datalog.
+         * Note: Order here is NOT important. The order is important
+         *       in the setFields() call below
+         */
+        public Datalogger.GenericField runTime = new Datalogger.GenericField("runTime");
+        public Datalogger.GenericField xPose   = new Datalogger.GenericField("X");
+        public Datalogger.GenericField yPose   = new Datalogger.GenericField("Y");
+        public Datalogger.GenericField heading = new Datalogger.GenericField("Heading");
+        public Datalogger.GenericField tx = new Datalogger.GenericField("tx");
+        public Datalogger.GenericField ty = new Datalogger.GenericField("ty");
 
+        public Datalog(String name) {
+            datalogger = new Datalogger.Builder()
+                    .setFilename(name)
+                    .setAutoTimestamp(Datalogger.AutoTimestamp.DECIMAL_SECONDS)
+                    /*
+                     * Tell it about the fields we care to log.
+                     * Note: Order *IS* important here! The order in which we list the
+                     *       fields is the order in which they will appear in the log.
+                     */
+                    .setFields( runTime, xPose, yPose, heading, tx, ty )
+                    .build();
+        }
+
+        // Tell the datalogger to gather the values of the fields
+        // and write a new line in the log.
+        public void writeLine() {
+            datalogger.writeLine();
+        }
+    }
 }

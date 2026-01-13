@@ -198,6 +198,9 @@ public class GoalTagLimelight {
     public double getTx() {
         return tx;
     }
+    public double getTy() {
+        return ty;
+    }
     public int getID() {
         return teamID;
     }
