@@ -68,6 +68,7 @@ public class MecanumTeleOp7462 extends OpMode {
     Servo launchFlapLeft;
     Servo launchFlapRight;
     Servo flipper;
+    Servo lift;
 
     // Timers
     ElapsedTime timerLeft = new ElapsedTime();
@@ -87,6 +88,7 @@ public class MecanumTeleOp7462 extends OpMode {
     public void init() {
         launchFlapLeft = hardwareMap.get(Servo.class, "launchFlapLeft");
         launchFlapRight = hardwareMap.get(Servo.class, "launchFlapRight");
+        lift = hardwareMap.get(Servo.class, "lift");
         flipper = hardwareMap.get(Servo.class, "flipper");
 
         ch = new Chassis(hardwareMap);
@@ -160,7 +162,9 @@ public class MecanumTeleOp7462 extends OpMode {
             // do math here
             //shooterLeft.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
             //shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
-            shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
+            if (!emergencyMode) {
+                shooterLeft.targetVelocity = shooterRight.getShooterVelo(limelight);
+            }
             leftIsRunning = true;
             timerLeft.reset();
         }
@@ -168,9 +172,17 @@ public class MecanumTeleOp7462 extends OpMode {
             // do math here
             //shooterRight.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
             //shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
-            shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
+            if (!emergencyMode) {
+                shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
+            }
             rightIsRunning = true;
             timerRight.reset();
+        }
+        if (gamepad1.yWasPressed()) {
+            lift.setPosition(0);
+        }
+        if (gamepad1.aWasPressed()) {
+            lift.setPosition(1);
         }
         if (gamepad2.dpadLeftWasPressed()) {
             flipper.setPosition(1);
@@ -199,7 +211,7 @@ public class MecanumTeleOp7462 extends OpMode {
             ch.setMaxSpeed(1);
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        if (gamepad1.yWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
+        if (gamepad1.yWasPressed() && limelight.isDataCurrent) {
             shootSequence = true;
         }
         if (shootSequence) {
