@@ -191,8 +191,6 @@ public class FarAuto extends LinearOpMode {
 
             // Log values to Panels and Driver Station
             panelsTelemetry.debug("Path State", pathState);
-//            panelsTelemetry.debug("X", follower.getPose().getX());
-//            panelsTelemetry.debug("Y", follower.getPose().getY());
             panelsTelemetry.debug("Heading", follower.getPose().getHeading());
             panelsTelemetry.update(telemetry);
         }
