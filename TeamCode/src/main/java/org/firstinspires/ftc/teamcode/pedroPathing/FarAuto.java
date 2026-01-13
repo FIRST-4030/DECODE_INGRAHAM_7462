@@ -69,6 +69,8 @@ public class FarAuto extends LinearOpMode {
     ElapsedTime runtime = new ElapsedTime();
     boolean logDataFar = false;
 
+    public String stepName = "void";
+
     @Override
     public void runOpMode() {
 
@@ -298,6 +300,8 @@ public class FarAuto extends LinearOpMode {
         switch (pathState) {
             case 0:
                 follower.followPath(MOVETOLAUNCH, Shooter.maxPower, true);
+                stepName = "MOVETOLAUNCH";
+                if (logDataFar) { logOneSample(follower.getPose()); }
                 setPathState(1);
                 break;
             case 1:
@@ -306,6 +310,8 @@ public class FarAuto extends LinearOpMode {
                         Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
                     }
                     follower.followPath(PREPARETOCOLLECT1, Shooter.maxPower, true);
+                    stepName = "PREPARETOCOLLECT1";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(2);
                 }
                 break;
@@ -313,6 +319,8 @@ public class FarAuto extends LinearOpMode {
                 if (!follower.isBusy()) {
                     follower.followPath(COLLECT11, Shooter.maxPower, true);
                     timer.reset();
+                    stepName = "PREPARETOCOLLECT11";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(3);
                 }
                 break;
@@ -323,6 +331,8 @@ public class FarAuto extends LinearOpMode {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT12, Shooter.maxPower, true);
                         timer.reset();
+                        stepName = "PREPARETOCOLLECT12";
+                        if (logDataFar) { logOneSample(follower.getPose()); }
                         setPathState(4);
                     }
                 }
@@ -333,6 +343,8 @@ public class FarAuto extends LinearOpMode {
                     if (timer.seconds() > 0.8) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT13, Shooter.maxPower, true);
+                        stepName = "PREPARETOCOLLECT13";
+                        if (logDataFar) { logOneSample(follower.getPose()); }
                         setPathState(5);
                     }
                 }
@@ -341,6 +353,8 @@ public class FarAuto extends LinearOpMode {
                 if (!follower.isBusy()) {
 
                     follower.followPath(MOVETOLAUNCH2, Shooter.maxPower,true);
+                    stepName = "MOVETOLAUNCH2";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(6);
                 }
                 break;
@@ -350,6 +364,8 @@ public class FarAuto extends LinearOpMode {
                         Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
                     }
                     follower.followPath(PREPARETOCOLLECT2, Shooter.maxPower, true);
+                    stepName = "PREPARETOCOLLECT2";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(7);
                 }
                 break;
@@ -357,6 +373,8 @@ public class FarAuto extends LinearOpMode {
                 if (!follower.isBusy()) {
                     follower.followPath(COLLECT21, Shooter.maxPower, true);
                     timer.reset();
+                    stepName = "COLLECT21";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(8);
                 }
                 break;
@@ -367,6 +385,9 @@ public class FarAuto extends LinearOpMode {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT22, Shooter.maxPower, true);
                         timer.reset();
+
+                        stepName = "COLLECT22";
+                        if (logDataFar) { logOneSample(follower.getPose()); }
                         setPathState(9);
                     }
                 }
@@ -377,6 +398,8 @@ public class FarAuto extends LinearOpMode {
                     if (timer.seconds() > 0.8) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT23, Shooter.maxPower, true);
+                        stepName = "COLLECT23";
+                        if (logDataFar) { logOneSample(follower.getPose()); }
                         setPathState(10);
                     }
                 }
@@ -384,6 +407,8 @@ public class FarAuto extends LinearOpMode {
             case 10:
                 if (!follower.isBusy()) {
                     follower.followPath(MOVETOLAUNCH3, Shooter.maxPower, true);
+                    stepName = "MOVETOLAUNCH3";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(11);
                 }
                 break;
@@ -393,12 +418,16 @@ public class FarAuto extends LinearOpMode {
                         Shooter.fireVolleySorted(limelight,telemetry,flipper,shooterLeft,launchFlapLeft,shooterRight,launchFlapRight, this);
                     }
                     follower.followPath(ENDOFFLINE, Shooter.maxPower, true);
+                    stepName = "ENDOFFLINE";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(12);
                 }
                 break;
             case 12:
                 if (!follower.isBusy()) {
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */
+                    stepName = "UNDEFINEDPATH";
+                    if (logDataFar) { logOneSample(follower.getPose()); }
                     setPathState(-1);
                 }
                 break;
@@ -442,6 +471,7 @@ public class FarAuto extends LinearOpMode {
         datalogFar.heading.set(pose.getHeading());
         datalogFar.tx.set(limelight.getTx());
         datalogFar.ty.set(limelight.getTy());
+        datalogFar.dataName.set(stepName);
         datalogFar.writeLine();
     }
     public static class Datalog {
@@ -460,6 +490,7 @@ public class FarAuto extends LinearOpMode {
         public Datalogger.GenericField heading = new Datalogger.GenericField("Heading");
         public Datalogger.GenericField tx = new Datalogger.GenericField("tx");
         public Datalogger.GenericField ty = new Datalogger.GenericField("ty");
+        public Datalogger.GenericField dataName = new Datalogger.GenericField("dataName");
 
         public Datalog(String name) {
             datalogger = new Datalogger.Builder()
@@ -470,7 +501,7 @@ public class FarAuto extends LinearOpMode {
                      * Note: Order *IS* important here! The order in which we list the
                      *       fields is the order in which they will appear in the log.
                      */
-                    .setFields( runTime, xPose, yPose, heading, tx, ty )
+                    .setFields( runTime, xPose, yPose, heading, tx, ty, dataName)
                     .build();
         }
 
