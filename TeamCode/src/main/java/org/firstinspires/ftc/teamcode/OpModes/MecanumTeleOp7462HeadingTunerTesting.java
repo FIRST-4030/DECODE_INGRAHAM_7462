@@ -61,7 +61,7 @@ import java.util.function.Supplier;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
-@TeleOp(name = "Mecanum TeleOp 7462", group = "Robot")
+@TeleOp(name = "Mecanum TeleOp 7462 Heading test", group = "Robot")
 //@Disabled //comment this out when ready to add to android phone
 public class MecanumTeleOp7462HeadingTunerTesting extends OpMode {
     private Follower follower;

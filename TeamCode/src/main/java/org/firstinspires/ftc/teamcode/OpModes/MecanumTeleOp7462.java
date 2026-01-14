@@ -179,7 +179,15 @@ public class MecanumTeleOp7462 extends OpMode {
             timerRight.reset();
         }
         if (gamepad1.yWasPressed()) {
-            lift.setPosition(0);
+            idlePower = 0;
+            lift.setPosition(0.25);
+            collectorBack.setPower(0);
+            collectorFront.setPower(0);
+            shooterLeft.setPower(0);
+            shooterRight.setPower(0);
+            launchFlapLeft.setPosition(Constants.leftFlapDown);
+            launchFlapRight.setPosition(Constants.rightFlapDown);
+            flipper.setPosition(0.525);
         }
         if (gamepad1.aWasPressed()) {
             lift.setPosition(1);
@@ -211,7 +219,7 @@ public class MecanumTeleOp7462 extends OpMode {
             ch.setMaxSpeed(1);
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        if (gamepad1.yWasPressed() && limelight.isDataCurrent) {
+        if (gamepad1.left_trigger == 1 && limelight.isDataCurrent) {
             shootSequence = true;
         }
         if (shootSequence) {

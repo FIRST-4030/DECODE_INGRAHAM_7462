@@ -21,8 +21,8 @@ public class Shooter {
     static final double   COUNTS_PER_REV = 28 ;  // REV HD Hex 1:1 Motor Encoder
 
     public double targetVelocity = 0;  // rotations per second (max is ~40)
-    public static double collectorPower = 0.53;
-    public static double maxPower = 1;
+    public static double collectorPower = 0.6; //0.53
+    public static double maxPower = 0.5;
 
     public Shooter(HardwareMap hardwareMap, String name, Boolean dir) {
         shooter = (DcMotorEx) hardwareMap.get(DcMotor.class, name);
@@ -113,7 +113,7 @@ public class Shooter {
         }
         timer.reset();
         launchFlapLeft.setPosition(Constants.leftFlapUp);
-        while (timer.seconds() < 0.6) {
+        while (timer.seconds() < 0.8) {
             shooterLeft.overridePower();
         }
         launchFlapLeft.setPosition(Constants.leftFlapDown);
@@ -130,7 +130,7 @@ public class Shooter {
         }
         timer.reset();
         launchFlapRight.setPosition(Constants.rightFlapUp);
-        while (timer.seconds() < 0.6) {
+        while (timer.seconds() < 0.8) {
             shooterRight.overridePower();
         }
         launchFlapRight.setPosition(Constants.rightFlapDown);
