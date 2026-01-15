@@ -181,6 +181,7 @@ public class MecanumTeleOp7462 extends OpMode {
         if (gamepad1.yWasPressed()) {
             idlePower = 0;
             lift.setPosition(0.25);
+            // turn everything off
             collectorBack.setPower(0);
             collectorFront.setPower(0);
             shooterLeft.setPower(0);
@@ -189,22 +190,22 @@ public class MecanumTeleOp7462 extends OpMode {
             launchFlapRight.setPosition(Constants.rightFlapDown);
             flipper.setPosition(0.525);
         }
-        if (gamepad1.aWasPressed()) {
+        if (gamepad1.bWasPressed()) {
             lift.setPosition(1);
         }
-        if (gamepad2.dpadLeftWasPressed()) {
+        if (gamepad1.dpadLeftWasPressed()) {
             flipper.setPosition(1);
             timerFlipper.reset();
         }
-        if (gamepad2.dpadRightWasPressed()) {
+        if (gamepad1.dpadRightWasPressed()) {
             flipper.setPosition(0.1);
             timerFlipper.reset();
         }
-        if (gamepad2.dpadUpWasPressed()) {
+        if (gamepad1.dpadUpWasPressed()) {
             collectorBack.setPower(-Shooter.collectorPower);
             collectorFront.setPower(-Shooter.collectorPower);
         }
-        if (gamepad2.dpadUpWasReleased()) {
+        if (gamepad1.dpadUpWasReleased()) {
             collectorFront.setPower(Shooter.collectorPower);
             collectorBack.setPower(Shooter.collectorPower);
         }
