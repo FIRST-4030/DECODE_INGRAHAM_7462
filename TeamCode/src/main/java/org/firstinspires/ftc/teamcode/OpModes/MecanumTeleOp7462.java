@@ -180,7 +180,7 @@ public class MecanumTeleOp7462 extends OpMode {
         }
         if (gamepad1.yWasPressed()) {
             idlePower = 0;
-            lift.setPosition(0.25);
+            lift.setPosition(0);
             // turn everything off
             collectorBack.setPower(0);
             collectorFront.setPower(0);
@@ -191,7 +191,7 @@ public class MecanumTeleOp7462 extends OpMode {
             flipper.setPosition(0.525);
         }
         if (gamepad1.bWasPressed()) {
-            lift.setPosition(1);
+            lift.setPosition(0.85);
         }
         if (gamepad1.dpadLeftWasPressed()) {
             flipper.setPosition(1);
