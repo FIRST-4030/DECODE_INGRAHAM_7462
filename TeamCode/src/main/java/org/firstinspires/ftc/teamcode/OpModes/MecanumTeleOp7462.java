@@ -224,15 +224,15 @@ public class MecanumTeleOp7462 extends OpMode {
             shootSequence = true;
         }
         if(shootSequence) {
-           // while(leftIsRunning || rightIsRunning) {
-             //   ElapsedTime timer = new ElapsedTime();
+
+                ElapsedTime timer = new ElapsedTime();
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
                 shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
                 leftIsRunning = true;
                 rightIsRunning = true;
                 timerLeft.reset();
                 timerRight.reset();
-           // }
+            if(!(leftIsRunning || rightIsRunning) && timer.seconds() > 3) {
                 flipper.setPosition(1);
                 timerFlipper.reset();
 //                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
@@ -240,6 +240,7 @@ public class MecanumTeleOp7462 extends OpMode {
 //                launchFlapLeft.setPosition(Constants.leftFlapUp);
 //                leftIsRunning = true;
 //                shootSequence = false;
+            }
 
         }
         // Shoot when at speed
