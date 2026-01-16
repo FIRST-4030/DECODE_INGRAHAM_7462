@@ -177,13 +177,13 @@ public class CloseAuto extends LinearOpMode {
         MOVETOLAUNCH = follower
                 .pathBuilder()
                 .addPath(new BezierLine(autoPoses.startPose, autoPoses.launchPose))
-                .setLinearHeadingInterpolation(Math.toRadians(180-angleOffset), Math.toRadians(Math.abs(angleOffset-40)))
+                .setLinearHeadingInterpolation(Math.toRadians(180-angleOffset), Math.toRadians(Math.abs(angleOffset-45)))
                 .build();
 
         MOVETOCOLLECT = follower
                 .pathBuilder()
                 .addPath(new BezierLine(autoPoses.launchPose, autoPoses.readyPickUp1))
-                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-40)), Math.toRadians(angleOffset))
+                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-45)), Math.toRadians(angleOffset))
                 .build();
 
         COLLECT11 = follower
@@ -207,13 +207,13 @@ public class CloseAuto extends LinearOpMode {
         MOVETOLAUNCH2 = follower
                 .pathBuilder()
                 .addPath(new BezierLine(autoPoses.line13, autoPoses.launchPose))
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-35)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-40)))
                 .build();
 
         ENDOFFLINE = follower
                 .pathBuilder()
                 .addPath(new BezierLine(autoPoses.launchPose, autoPoses.endOffLine))
-                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-35)), Math.toRadians(270))
+                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-40)), Math.toRadians(270))
                 .build();
     }
         public int autonomousPathUpdate() {
