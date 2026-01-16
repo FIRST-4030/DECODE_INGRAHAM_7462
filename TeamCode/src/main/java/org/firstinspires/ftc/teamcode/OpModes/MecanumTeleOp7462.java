@@ -233,8 +233,8 @@ public class MecanumTeleOp7462 extends OpMode {
                 timerLeft.reset();
                 timerRight.reset();
            // }
-//                flipper.setPosition(1);
-//                timerFlipper.reset();
+                flipper.setPosition(1);
+                timerFlipper.reset();
 //                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
 //                timerLeft.reset();
 //                launchFlapLeft.setPosition(Constants.leftFlapUp);
