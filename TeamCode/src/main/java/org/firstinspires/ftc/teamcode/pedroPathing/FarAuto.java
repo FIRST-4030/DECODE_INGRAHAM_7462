@@ -65,6 +65,7 @@ public class FarAuto extends LinearOpMode {
 
     final double line1Y = 35.478;
     final double line2Y = 59.340;
+    final double flipperDelay = 1.0;
     private boolean ran = false;
     ElapsedTime runtime = new ElapsedTime();
     boolean logDataFar = false;
@@ -327,7 +328,7 @@ public class FarAuto extends LinearOpMode {
             case 3:
                 if (!follower.isBusy()) {
                     flipper.setPosition(0);
-                    if (timer.seconds() > 0.8) {
+                    if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT12, Shooter.maxPower, true);
                         timer.reset();
@@ -340,7 +341,7 @@ public class FarAuto extends LinearOpMode {
             case 4:
                 if (!follower.isBusy()) {
                     flipper.setPosition(1);
-                    if (timer.seconds() > 0.8) {
+                    if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT13, Shooter.maxPower, true);
                         stepName = "PREPARETOCOLLECT13";
@@ -381,7 +382,7 @@ public class FarAuto extends LinearOpMode {
             case 8:
                 if (!follower.isBusy()) {
                     flipper.setPosition(1);
-                    if (timer.seconds() > 0.8) {
+                    if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT22, Shooter.maxPower, true);
                         timer.reset();
@@ -395,7 +396,7 @@ public class FarAuto extends LinearOpMode {
             case 9:
                 if (!follower.isBusy()) {
                     flipper.setPosition(0);
-                    if (timer.seconds() > 0.8) {
+                    if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT23, Shooter.maxPower, true);
                         stepName = "COLLECT23";

@@ -28,19 +28,24 @@
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
 import org.firstinspires.ftc.teamcode.Shooter;
+
+import java.util.function.Supplier;
 
 /*
  * This OpMode illustrates how to program your robot to drive field relative.  This means
@@ -56,9 +61,13 @@ import org.firstinspires.ftc.teamcode.Shooter;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
-@TeleOp(name = "Mecanum TeleOp 7462", group = "Robot")
+@TeleOp(name = "Mecanum TeleOp 7462 Heading test", group = "Robot")
 //@Disabled //comment this out when ready to add to android phone
-public class MecanumTeleOp7462 extends OpMode {
+public class MecanumTeleOp7462HeadingTunerTesting extends OpMode {
+    private Follower follower;
+    public static Pose startingPose; //See ExampleAuto to understand how to use this
+    private boolean automatedDrive;
+    private Supplier<PathChain> pathChain;
     GoalTagLimelight limelight;
     Shooter collectorBack;
     Shooter collectorFront;
@@ -91,6 +100,7 @@ public class MecanumTeleOp7462 extends OpMode {
         lift = hardwareMap.get(Servo.class, "lift");
         flipper = hardwareMap.get(Servo.class, "flipper");
 
+        follower = Constants.createFollower(hardwareMap);
         ch = new Chassis(hardwareMap);
 
         collectorFront = new Shooter(hardwareMap, "collectorFront", false);
@@ -112,6 +122,12 @@ public class MecanumTeleOp7462 extends OpMode {
         timerRight.reset();
         timerFlipper.reset();
 
+        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+        follower.update();
+        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(45, 98))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
+                .build();
 
     }
 
@@ -138,14 +154,39 @@ public class MecanumTeleOp7462 extends OpMode {
     public void start() {
         collectorFront.setPower(Shooter.collectorPower);
         collectorBack.setPower(Shooter.collectorPower);
+        follower.startTeleopDrive();
     }
 
     @Override
     public void loop() {
+        follower.update();
         limelight.process(telemetry);
+
 
         shooterRight.overridePower();
         shooterLeft.overridePower();
+
+        if (!automatedDrive) {
+            //Make the last parameter false for field-centric
+            //In case the drivers want to use a "slowMode" you can scale the vectors
+            //This is the normal version to use in the TeleOp
+            follower.setTeleOpDrive(
+                    -gamepad1.left_stick_y,
+                    gamepad1.left_stick_x,
+                    gamepad1.right_stick_x,
+                    true // Robot Centric
+            );
+        }
+        //Automated PathFollowing
+        if (gamepad1.xWasPressed()) {
+            follower.followPath(pathChain.get());
+            automatedDrive = true;
+        }
+        //Stop automated following if the follower is done
+        if (automatedDrive && (gamepad1.bWasPressed())) {
+            follower.startTeleopDrive();
+            automatedDrive = false;
+        }
 
 
         telemetry.addData("shooterLeftCurrentVelocity", shooterLeft.getVelocity());
@@ -179,33 +220,24 @@ public class MecanumTeleOp7462 extends OpMode {
             timerRight.reset();
         }
         if (gamepad1.yWasPressed()) {
-            idlePower = 0;
-            lift.setPosition(0.25);
-            // turn everything off
-            collectorBack.setPower(0);
-            collectorFront.setPower(0);
-            shooterLeft.setPower(0);
-            shooterRight.setPower(0);
-            launchFlapLeft.setPosition(Constants.leftFlapDown);
-            launchFlapRight.setPosition(Constants.rightFlapDown);
-            flipper.setPosition(0.525);
+            lift.setPosition(0);
         }
-        if (gamepad1.bWasPressed()) {
+        if (gamepad1.aWasPressed()) {
             lift.setPosition(1);
         }
-        if (gamepad1.dpadLeftWasPressed()) {
+        if (gamepad2.dpadLeftWasPressed()) {
             flipper.setPosition(1);
             timerFlipper.reset();
         }
-        if (gamepad1.dpadRightWasPressed()) {
+        if (gamepad2.dpadRightWasPressed()) {
             flipper.setPosition(0.1);
             timerFlipper.reset();
         }
-        if (gamepad1.dpadUpWasPressed()) {
+        if (gamepad2.dpadUpWasPressed()) {
             collectorBack.setPower(-Shooter.collectorPower);
             collectorFront.setPower(-Shooter.collectorPower);
         }
-        if (gamepad1.dpadUpWasReleased()) {
+        if (gamepad2.dpadUpWasReleased()) {
             collectorFront.setPower(Shooter.collectorPower);
             collectorBack.setPower(Shooter.collectorPower);
         }
@@ -219,28 +251,26 @@ public class MecanumTeleOp7462 extends OpMode {
         } else {
             ch.setMaxSpeed(1);
         }
-        ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        if (gamepad1.left_trigger == 1 && limelight.isDataCurrent) {
+        //ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        if (gamepad1.yWasPressed() && limelight.isDataCurrent) {
             shootSequence = true;
         }
-        if(shootSequence) {
-            while(leftIsRunning || rightIsRunning) {
-                ElapsedTime timer = new ElapsedTime();
-                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
-                shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
-                leftIsRunning = true;
-                rightIsRunning = true;
-                timerLeft.reset();
-                timerRight.reset();
-            }
+        if (shootSequence) {
+            ElapsedTime timer = new ElapsedTime();
+            shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
+            shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
+            leftIsRunning = true;
+            rightIsRunning = true;
+            timerLeft.reset();
+            timerRight.reset();
+            if (timer.seconds() > 3) {
                 flipper.setPosition(1);
                 timerFlipper.reset();
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
                 timerLeft.reset();
-                launchFlapLeft.setPosition(Constants.leftFlapUp);
                 leftIsRunning = true;
                 shootSequence = false;
-
+            }
         }
         // Shoot when at speed
         if (leftIsRunning) {
