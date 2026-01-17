@@ -229,6 +229,7 @@ public class MecanumTeleOp7462 extends OpMode {
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         if (gamepad1.left_trigger == 1 && limelight.isDataCurrent) {
             shootSequence = true;
+            shootSquenceStep1 = true;
         }
         if(shootSequence) {
             ElapsedTime timer = new ElapsedTime();
