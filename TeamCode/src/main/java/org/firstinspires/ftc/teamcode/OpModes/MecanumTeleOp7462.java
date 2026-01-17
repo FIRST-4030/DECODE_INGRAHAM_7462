@@ -198,16 +198,16 @@ public class MecanumTeleOp7462 extends OpMode {
             telemetry.addData("Lift Value", lift.getPosition());
         }
         if (gamepad1.dpadLeftWasPressed()) {
-            flipper.setPosition(1);
+            flipper.setPosition(Constants.flipperLeft);
             timerFlipper.reset();
         }
         if (gamepad1.dpadRightWasPressed()) {
-            flipper.setPosition(0.1);
+            flipper.setPosition(Constants.flipperRight);
             timerFlipper.reset();
         }
         if (gamepad1.dpadUpWasPressed()) {
-            collectorBack.setPower(-Shooter.collectorPower);
-            collectorFront.setPower(-Shooter.collectorPower);
+            collectorBack.setPower(-1);
+            collectorFront.setPower(-1);
         }
         if (gamepad1.dpadUpWasReleased()) {
             collectorFront.setPower(Shooter.collectorPower);
