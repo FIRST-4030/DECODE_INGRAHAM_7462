@@ -88,6 +88,8 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean shootSquenceStep1 = true;
 
     private boolean shootSquenceStep2;
+
+    private boolean shootSquenceStep3;
     private boolean emergencyMode = false;
     private boolean slowChildMode = false;
 
@@ -243,27 +245,29 @@ public class MecanumTeleOp7462 extends OpMode {
                 timerLeft.reset();
                 timerRight.reset();
                 shootSquenceStep1 = false;
+                shootSquenceStep2 = true;
                 sequenceTimer.reset();
             }
             shootSequencetime = sequenceTimer.seconds();
             if(!(launchFlapLeft.getPosition() == Constants.leftFlapDown || launchFlapRight.getPosition() == Constants.rightFlapDown || shootSquenceStep1)){
                 sequenceTimer.reset();
             }
-            if(sequenceTimer.seconds() > 0.5){
+            if(sequenceTimer.seconds() > 0.5 && shootSquenceStep2){
                 flipper.setPosition(1);
                 timerFlipper.reset();
-                shootSquenceStep2 = true;
+                shootSquenceStep3 = true;
                 sequenceTimer.reset();
+                shootSquenceStep2 = false;
             }
             if(!(flipper.getPosition() == 0.525)){
                 sequenceTimer.reset();
             }
-            if(shootSquenceStep2 && sequenceTimer.seconds() > 0.5) {
+            if(shootSquenceStep3 && sequenceTimer.seconds() > 0.5) {
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
                 timerLeft.reset();
                 launchFlapLeft.setPosition(Constants.leftFlapUp);
                 leftIsRunning = true;
-                shootSquenceStep2 = false;
+                shootSquenceStep3 = false;
                 shootSequence = false;
             }
 
