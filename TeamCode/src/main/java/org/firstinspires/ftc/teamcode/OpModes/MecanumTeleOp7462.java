@@ -204,11 +204,11 @@ public class MecanumTeleOp7462 extends OpMode {
             telemetry.addData("Lift Value", lift.getPosition());
         }
         if (gamepad1.dpadLeftWasPressed()) {
-            flipper.setPosition(1);
+            flipper.setPosition(Constants.flipperLeft);
             timerFlipper.reset();
         }
         if (gamepad1.dpadRightWasPressed()) {
-            flipper.setPosition(0.1);
+            flipper.setPosition(Constants.flipperRight);
             timerFlipper.reset();
         }
         if (gamepad1.dpadUpWasPressed()) {
@@ -246,12 +246,19 @@ public class MecanumTeleOp7462 extends OpMode {
                 sequenceTimer.reset();
             }
             shootSequencetime = sequenceTimer.seconds();
-            if((!(leftIsRunning || rightIsRunning)) && sequenceTimer.seconds() > 2){
+            if(!(launchFlapLeft.getPosition() == Constants.leftFlapDown || launchFlapRight.getPosition() == Constants.rightFlapDown || shootSquenceStep1)){
+                sequenceTimer.reset();
+            }
+            if(sequenceTimer.seconds() > 0.5){
                 flipper.setPosition(1);
                 timerFlipper.reset();
                 shootSquenceStep2 = true;
+                sequenceTimer.reset();
             }
-            if(shootSquenceStep2 && sequenceTimer.seconds() > 3) {
+            if(!(flipper.getPosition() == 0.525)){
+                sequenceTimer.reset();
+            }
+            if(shootSquenceStep2 && sequenceTimer.seconds() > 0.5) {
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
                 timerLeft.reset();
                 launchFlapLeft.setPosition(Constants.leftFlapUp);
