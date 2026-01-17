@@ -190,7 +190,6 @@ public class MecanumTeleOp7462 extends OpMode {
             shooterRight.setPower(0);
             launchFlapLeft.setPosition(Constants.leftFlapDown);
             launchFlapRight.setPosition(Constants.rightFlapDown);
-            flipper.setPosition(0.525);
         }
         if (gamepad1.bWasPressed()) {
             lift.setPosition(Constants.liftExtend);
