@@ -82,6 +82,8 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean rightIsRunning;
     private boolean shootSequence;
 
+    private double shootSequencetime;
+
     private boolean shootSquenceStep1 = true;
 
     private boolean shootSquenceStep2;
