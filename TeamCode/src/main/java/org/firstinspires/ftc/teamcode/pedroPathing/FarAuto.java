@@ -307,19 +307,19 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    if (Math.abs(limelight.getTx()) > 1) {
-                        ch.turnTo(limelight.getTx(), 0);
-                    } else {
-                        if (!testingMode) {
-                            Shooter.fireVolleySorted(limelight, telemetry, flipper, shooterLeft, launchFlapLeft, shooterRight, launchFlapRight, this);
-                        }
-                        follower.followPath(PREPARETOCOLLECT1, Shooter.maxPower, true);
-                        stepName = "PREPARETOCOLLECT1";
-                        if (logDataFar) {
-                            logOneSample(follower.getPose());
-                        }
-                        setPathState(2);
+//                    if (Math.abs(limelight.getTx()) > 1) {
+//                        ch.turnTo(limelight.getTx(), 0);
+//                    } else {
+                    if (!testingMode) {
+                        Shooter.fireVolleySorted(limelight, telemetry, flipper, shooterLeft, launchFlapLeft, shooterRight, launchFlapRight, this);
                     }
+                    follower.followPath(PREPARETOCOLLECT1, Shooter.maxPower, true);
+                    stepName = "PREPARETOCOLLECT1";
+                    if (logDataFar) {
+                        logOneSample(follower.getPose());
+                    }
+                    setPathState(2);
+                    //}
                 }
                 break;
             case 2:

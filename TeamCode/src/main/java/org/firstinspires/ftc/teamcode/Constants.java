@@ -19,8 +19,8 @@ public class Constants {
     public static final double leftFlapDown = 0.35;
     public static final double rightFlapUp = 0.75;
     public static final double rightFlapDown = 0.35;
-    public static final double liftExtend = 0.87;
-    public static final double liftRetract = 0;
+    public static final double liftExtend = 0.76;
+    public static final double liftRetract = 0.1;
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(11.832)  // Kg
             .forwardZeroPowerAcceleration(-40.13388889162883)
