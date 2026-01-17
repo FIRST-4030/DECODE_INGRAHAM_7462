@@ -74,6 +74,7 @@ public class MecanumTeleOp7462 extends OpMode {
     ElapsedTime timerLeft = new ElapsedTime();
     ElapsedTime timerRight = new ElapsedTime();
     ElapsedTime timerFlipper = new ElapsedTime();
+    ElapsedTime sequenceTimer = new ElapsedTime();
 
     Chassis ch;
     private double idlePower = 20;
