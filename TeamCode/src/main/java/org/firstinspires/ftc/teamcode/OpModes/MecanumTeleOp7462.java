@@ -84,7 +84,7 @@ public class MecanumTeleOp7462 extends OpMode {
 
     private boolean shootSquenceStep1 = true;
 
-    private boolean shootSquenceStep2 = false;
+    private boolean shootSquenceStep2;
     private boolean emergencyMode = false;
     private boolean slowChildMode = false;
 
@@ -239,7 +239,8 @@ public class MecanumTeleOp7462 extends OpMode {
                 shootSquenceStep1 = false;
                 shootSquenceStep2 = true;
             }
-            if(!(leftIsRunning || rightIsRunning) && timer.seconds() > 2 && shootSquenceStep2) {
+            shootSequencetime = sequenceTimer.seconds();
+            if((!(leftIsRunning || rightIsRunning)) && sequenceTimer.seconds() > 2 && shootSquenceStep2) {
                 flipper.setPosition(1);
                 timerFlipper.reset();
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
