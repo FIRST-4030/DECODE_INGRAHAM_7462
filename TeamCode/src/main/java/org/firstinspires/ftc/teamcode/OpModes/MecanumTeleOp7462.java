@@ -160,6 +160,9 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("collectorBackCurrentPower", collectorBack.getPower());
         telemetry.addData("Kp", kP);
         telemetry.addData("TimerLeft", timerLeft.seconds());
+        telemetry.addData("time", shootSequencetime);
+        telemetry.addData("shootSequence step 2", shootSquenceStep2);
+        telemetry.addData("shooter not running?",(!(leftIsRunning || rightIsRunning)));
         telemetry.update();
 
         if (gamepad1.leftBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
