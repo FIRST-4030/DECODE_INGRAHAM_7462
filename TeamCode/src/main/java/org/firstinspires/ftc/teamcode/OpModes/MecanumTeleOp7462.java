@@ -235,7 +235,6 @@ public class MecanumTeleOp7462 extends OpMode {
             shootSquenceStep1 = true;
         }
         if(shootSequence) {
-            ElapsedTime sequenceTimer = new ElapsedTime();
             if(shootSquenceStep1) {
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
                 shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
