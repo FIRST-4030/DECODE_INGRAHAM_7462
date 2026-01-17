@@ -244,6 +244,7 @@ public class MecanumTeleOp7462 extends OpMode {
                 timerRight.reset();
                 shootSquenceStep1 = false;
                 shootSquenceStep2 = true;
+                sequenceTimer.reset();
             }
             shootSequencetime = sequenceTimer.seconds();
             if((!(leftIsRunning || rightIsRunning)) && sequenceTimer.seconds() > 2 && shootSquenceStep2) {
