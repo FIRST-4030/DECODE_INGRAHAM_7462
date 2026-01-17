@@ -243,13 +243,15 @@ public class MecanumTeleOp7462 extends OpMode {
                 timerLeft.reset();
                 timerRight.reset();
                 shootSquenceStep1 = false;
-                shootSquenceStep2 = true;
                 sequenceTimer.reset();
             }
             shootSequencetime = sequenceTimer.seconds();
-            if((!(leftIsRunning || rightIsRunning)) && sequenceTimer.seconds() > 2 && shootSquenceStep2) {
+            if((!(leftIsRunning || rightIsRunning)) && sequenceTimer.seconds() > 2){
                 flipper.setPosition(1);
                 timerFlipper.reset();
+                shootSquenceStep2 = true;
+            }
+            if(shootSquenceStep2) {
                 shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
                 timerLeft.reset();
                 launchFlapLeft.setPosition(Constants.leftFlapUp);
