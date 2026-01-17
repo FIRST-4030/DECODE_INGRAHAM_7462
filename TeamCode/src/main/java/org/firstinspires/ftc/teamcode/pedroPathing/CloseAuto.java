@@ -240,7 +240,7 @@ public class CloseAuto extends LinearOpMode {
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(1);
+                    flipper.setPosition(Constants.flipperLeft);
                     if (timer.seconds() > 1) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT12, Shooter.maxPower, true);
@@ -252,7 +252,7 @@ public class CloseAuto extends LinearOpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(0);
+                    flipper.setPosition(Constants.flipperRight);
                     if (timer.seconds() > 1) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT13, Shooter.maxPower, true);

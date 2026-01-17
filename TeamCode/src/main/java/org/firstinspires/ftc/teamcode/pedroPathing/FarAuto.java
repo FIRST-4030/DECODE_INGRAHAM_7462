@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.onbotjava.OnBotJavaTracingStandardFileManager;
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Datalogger;
@@ -333,7 +335,7 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(0);
+                    flipper.setPosition(Constants.flipperRight);
                     if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT12, Shooter.maxPower, true);
@@ -346,7 +348,7 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(1);
+                    flipper.setPosition(Constants.flipperLeft);
                     if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT13, Shooter.maxPower, true);
@@ -387,7 +389,7 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 8:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(1);
+                    flipper.setPosition(Constants.flipperLeft);
                     if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT22, Shooter.maxPower, true);
@@ -401,7 +403,7 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 9:
                 if (!follower.isBusy()) {
-                    flipper.setPosition(0);
+                    flipper.setPosition(Constants.flipperRight);
                     if (timer.seconds() > flipperDelay) {
                         flipper.setPosition(0.525);
                         follower.followPath(COLLECT23, Shooter.maxPower, true);
