@@ -214,8 +214,8 @@ public class MecanumTeleOp7462 extends OpMode {
             timerFlipper.reset();
         }
         if (gamepad1.dpadUpWasPressed()) {
-            collectorBack.setPower(-Shooter.collectorPower);
-            collectorFront.setPower(-Shooter.collectorPower);
+            collectorBack.setPower(-1);
+            collectorFront.setPower(-1);
         }
         if (gamepad1.dpadUpWasReleased()) {
             collectorFront.setPower(Shooter.collectorPower);
