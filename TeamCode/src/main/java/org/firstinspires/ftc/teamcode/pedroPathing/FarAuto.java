@@ -193,6 +193,7 @@ public class FarAuto extends LinearOpMode {
 
             telemetry.addData("x", limelight.getX());
             telemetry.addData("y", limelight.getY());
+            telemetry.addData("Tx", limelight.getTx());
 
             // Log values to Panels and Driver Station
             panelsTelemetry.debug("Path State", pathState);
@@ -288,7 +289,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line23, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-65)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-67)))
                 .build();
 
         ENDOFFLINE = follower
@@ -296,7 +297,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.endOffLine)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-65)))
+                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-67)))
                 .build();
     }
     public int autonomousPathUpdate() {
@@ -309,19 +310,20 @@ public class FarAuto extends LinearOpMode {
                 break;
             case 1:
                 if (!follower.isBusy()) {
-//                    if (Math.abs(limelight.getTx()) > 1) {
-//                        ch.turnTo(limelight.getTx(), 0);
-//                    } else {
-                    if (!testingMode) {
-                        Shooter.fireVolleySorted(limelight, telemetry, flipper, shooterLeft, launchFlapLeft, shooterRight, launchFlapRight, this);
+                    if (Math.abs(limelight.getTx()) > 1) {
+                        ch.turnTo(limelight.getTx(), 0);
+                    } else {
+                        if (!testingMode) {
+                            Shooter.fireVolleySorted(limelight, telemetry, flipper, shooterLeft, launchFlapLeft, shooterRight, launchFlapRight, this);
+                        }
+                        follower.followPath(PREPARETOCOLLECT1, Shooter.maxPower, true);
+                        stepName = "PREPARETOCOLLECT1";
+                        if (logDataFar) {
+                            logOneSample(follower.getPose());
+                        }
+                        setPathState(2);
+                        //}
                     }
-                    follower.followPath(PREPARETOCOLLECT1, Shooter.maxPower, true);
-                    stepName = "PREPARETOCOLLECT1";
-                    if (logDataFar) {
-                        logOneSample(follower.getPose());
-                    }
-                    setPathState(2);
-                    //}
                 }
                 break;
             case 2:

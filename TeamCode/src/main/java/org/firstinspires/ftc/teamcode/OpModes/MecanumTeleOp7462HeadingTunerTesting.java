@@ -34,6 +34,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -61,6 +62,7 @@ import java.util.function.Supplier;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
+@Disabled
 @TeleOp(name = "Mecanum TeleOp 7462 Heading test", group = "Robot")
 //@Disabled //comment this out when ready to add to android phone
 public class MecanumTeleOp7462HeadingTunerTesting extends OpMode {

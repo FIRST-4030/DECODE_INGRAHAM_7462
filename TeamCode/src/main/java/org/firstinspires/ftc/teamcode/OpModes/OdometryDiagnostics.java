@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Pinpoint;
 
-
+@Disabled
 @TeleOp(name="OdometryDiagnostics", group="Demo")
 public class OdometryDiagnostics extends OpMode {
 

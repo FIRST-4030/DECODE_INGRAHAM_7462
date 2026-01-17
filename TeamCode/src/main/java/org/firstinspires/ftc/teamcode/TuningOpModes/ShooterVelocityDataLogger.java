@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.GoalTagLimelight;
 import org.firstinspires.ftc.teamcode.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
+@Disabled
 @TeleOp(name = "ShooterDataLogger")
 public class ShooterVelocityDataLogger extends OpMode {
 

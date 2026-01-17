@@ -306,7 +306,7 @@ public class CloseAuto extends LinearOpMode {
             line12 = new Pose(line11.getX() + 5*sign, line1Y);
             line13 = new Pose(line12.getX() + 5*sign, line1Y);
 
-            endOffLine = new Pose(startPose.getX(), 83.232);
+            endOffLine = new Pose(startPose.getX(), 102.232);
         }
     }
 }

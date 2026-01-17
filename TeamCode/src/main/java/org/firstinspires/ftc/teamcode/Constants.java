@@ -19,8 +19,8 @@ public class Constants {
     public static final double leftFlapDown = 0.35;
     public static final double rightFlapUp = 0.75;
     public static final double rightFlapDown = 0.35;
-    public static final double liftExtend = 0.76;
-    public static final double liftRetract = 0.1;
+    public static final double liftExtend = 0.1;
+    public static final double liftRetract = 0.76;
     public static final double flipperRight = 0.2;
     public static final double flipperLeft = 1.0;
     public static FollowerConstants followerConstants = new FollowerConstants()

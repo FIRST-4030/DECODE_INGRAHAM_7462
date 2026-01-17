@@ -192,7 +192,7 @@ public class MecanumTeleOp7462 extends OpMode {
         }
         if (gamepad1.yWasPressed()) {
             idlePower = 0;
-            lift.setPosition(Constants.liftRetract);
+            lift.setPosition(Constants.liftExtend);
             // turn everything off
             collectorBack.setPower(0);
             collectorFront.setPower(0);
@@ -202,7 +202,7 @@ public class MecanumTeleOp7462 extends OpMode {
             launchFlapRight.setPosition(Constants.rightFlapDown);
         }
         if (gamepad1.bWasPressed()) {
-            lift.setPosition(Constants.liftExtend);
+            lift.setPosition(Constants.liftRetract);
             telemetry.addData("Lift Value", lift.getPosition());
         }
         if (gamepad1.dpadLeftWasPressed()) {
@@ -232,46 +232,46 @@ public class MecanumTeleOp7462 extends OpMode {
             ch.setMaxSpeed(1);
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        if (gamepad1.left_trigger == 1 && limelight.isDataCurrent) {
-            shootSequence = true;
-            shootSquenceStep1 = true;
-        }
-        if(shootSequence) {
-            if(shootSquenceStep1) {
-                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
-                shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
-                leftIsRunning = true;
-                rightIsRunning = true;
-                timerLeft.reset();
-                timerRight.reset();
-                shootSquenceStep1 = false;
-                shootSquenceStep2 = true;
-                sequenceTimer.reset();
-            }
-            shootSequencetime = sequenceTimer.seconds();
-            if(!(launchFlapLeft.getPosition() == Constants.leftFlapDown || launchFlapRight.getPosition() == Constants.rightFlapDown || shootSquenceStep1)){
-                sequenceTimer.reset();
-            }
-            if(sequenceTimer.seconds() > 0.5 && shootSquenceStep2){
-                flipper.setPosition(1);
-                timerFlipper.reset();
-                shootSquenceStep3 = true;
-                sequenceTimer.reset();
-                shootSquenceStep2 = false;
-            }
-            if(!(flipper.getPosition() == 0.525)){
-                sequenceTimer.reset();
-            }
-            if(shootSquenceStep3 && sequenceTimer.seconds() > 0.5) {
-                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
-                timerLeft.reset();
-                launchFlapLeft.setPosition(Constants.leftFlapUp);
-                leftIsRunning = true;
-                shootSquenceStep3 = false;
-                shootSequence = false;
-            }
+//        if (gamepad1.left_trigger == 1 && limelight.isDataCurrent) {
+//            shootSequence = true;
+//            shootSquenceStep1 = true;
+//        }
+//        if(shootSequence) {
+//            if(shootSquenceStep1) {
+//                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
+//                shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
+//                leftIsRunning = true;
+//                rightIsRunning = true;
+//                timerLeft.reset();
+//                timerRight.reset();
+//                shootSquenceStep1 = false;
+//                shootSquenceStep2 = true;
+//                sequenceTimer.reset();
+//            }
+//            shootSequencetime = sequenceTimer.seconds();
+//            if(!(launchFlapLeft.getPosition() == Constants.leftFlapDown || launchFlapRight.getPosition() == Constants.rightFlapDown || shootSquenceStep1)){
+//                sequenceTimer.reset();
+//            }
+//            if(sequenceTimer.seconds() > 0.5 && shootSquenceStep2){
+//                flipper.setPosition(1);
+//                timerFlipper.reset();
+//                shootSquenceStep3 = true;
+//                sequenceTimer.reset();
+//                shootSquenceStep2 = false;
+//            }
+//            if(!(flipper.getPosition() == 0.525)){
+//                sequenceTimer.reset();
+//            }
+//            if(shootSquenceStep3 && sequenceTimer.seconds() > 0.5) {
+//                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
+//                timerLeft.reset();
+//                launchFlapLeft.setPosition(Constants.leftFlapUp);
+//                leftIsRunning = true;
+//                shootSquenceStep3 = false;
+//                shootSequence = false;
+//            }
 
-        }
+        //}
         // Shoot when at speed
         if (leftIsRunning) {
             if (shooterLeft.atSpeed()) {
