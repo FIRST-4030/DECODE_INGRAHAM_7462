@@ -248,7 +248,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line13, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-65)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-62)))
                 .build();
 
         PREPARETOCOLLECT2 = follower
@@ -256,7 +256,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.readyPickUp2)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-65)), Math.toRadians(angleOffset))
+                .setLinearHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-62)), Math.toRadians(angleOffset))
                 .build();
 
         COLLECT21 = follower
@@ -288,7 +288,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.line23, autoPoses.launchPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-65)))
+                .setLinearHeadingInterpolation(Math.toRadians(angleOffset), Math.toRadians(Math.abs(angleOffset-62)))
                 .build();
 
         ENDOFFLINE = follower
@@ -296,7 +296,7 @@ public class FarAuto extends LinearOpMode {
                 .addPath(
                         new BezierLine(autoPoses.launchPose, autoPoses.endOffLine)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-65)))
+                .setConstantHeadingInterpolation(Math.toRadians(Math.abs(angleOffset-62)))
                 .build();
     }
     public int autonomousPathUpdate() {
