@@ -30,7 +30,7 @@ public class GoalTagLimelight {
 
     public boolean GPP = false; // id 21
     public boolean PGP = false; // id 22
-    public boolean PPG = false; // id 23
+    public boolean PPG = true; // id 23
     public boolean seeObelisk = false;
     private double tx;
     private double ty;
