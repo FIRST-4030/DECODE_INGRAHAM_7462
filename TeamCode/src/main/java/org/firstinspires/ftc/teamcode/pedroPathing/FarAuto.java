@@ -108,8 +108,6 @@ public class FarAuto extends LinearOpMode {
             while (timer2.seconds() < 3) {
                 limelight.setTeam(true);
                 limelight.processRobotPose(telemetry);
-                telemetry.addData("x", limelight.getX());
-                telemetry.addData("y", limelight.getY());
                 telemetry.addData("team ID", limelight.getTeam());
                 telemetry.addData("pipeline", limelight.getPipeline());
                 telemetry.update();
@@ -191,8 +189,6 @@ public class FarAuto extends LinearOpMode {
             follower.update(); // Update Pedro Pathing
             pathState = autonomousPathUpdate(); // Update autonomous state machine
 
-            telemetry.addData("x", limelight.getX());
-            telemetry.addData("y", limelight.getY());
             telemetry.addData("Tx", limelight.getTx());
 
             // Log values to Panels and Driver Station

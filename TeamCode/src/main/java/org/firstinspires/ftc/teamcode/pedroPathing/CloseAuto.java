@@ -99,10 +99,8 @@ public class CloseAuto extends LinearOpMode {
                 telemetry.update();
             }
 
-            limelight.setTeam(false);
+            limelight.setPipeline(7);
             limelight.processRobotPose(telemetry);
-            telemetry.addData("x", limelight.getX());
-            telemetry.addData("y", limelight.getY());
 
 //            limelight.readObelisk(telemetry);
             GlobalStorage.setPattern(limelight.getObelisk());

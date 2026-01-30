@@ -34,9 +34,6 @@ public class GoalTagLimelight {
     public boolean seeObelisk = false;
     private double tx;
     private double ty;
-    private double x;
-    private double y;
-
     private double camera_height = 16.4; // in
     private double target_height = 29.5; // in
     private double camera_angle = 0.032; // radians old was 0.0418
@@ -90,16 +87,37 @@ public class GoalTagLimelight {
         }
     }
     public void processRobotPose(Telemetry telemetry) {
+        double x = 0;
+        double y = 0;
+        double yaw = 0;
+        double x2 = 0;
+        double y2 = 0;
+        double yaw2 = 0;
+
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        limelight.updateRobotOrientation(orientation.getYaw());
+
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
-            Pose3D botPose = result.getBotpose_MT2();
-            x = botPose.getPosition().x;
-            y = botPose.getPosition().y;
-            double heading = botPose.getOrientation().getYaw(AngleUnit.RADIANS);
-            Pose pedroPose = PoseConverter.pose2DToPose(new Pose2D(DistanceUnit.METER, x, y, AngleUnit.DEGREES, heading), InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
-            telemetry.addData("Pose", pedroPose);
+            Pose3D botPose = result.getBotpose();
+            Pose3D botPose1 = result.getBotpose_MT2();
+            limelight.updateRobotOrientation(botPose.getOrientation().getYaw());
+            if (botPose != null) {
+                x = botPose.getPosition().x;
+                y = botPose.getPosition().y;
+                yaw = botPose.getOrientation().getYaw();
+                telemetry.addLine(String.format("MT1 Location %6.2f %6.2f (m)",x,y));
+                telemetry.addData("imu", imu.getRobotYawPitchRollAngles().getYaw());
+                telemetry.addData("MT1 rotation", String.format(" %.2f",yaw));
+            } else {
+                telemetry.addLine("ROBOT POSE NOT GETTING");
+            }
+            if (botPose1 != null) {
+                x2 = botPose1.getPosition().x;
+                y2 = botPose1.getPosition().y;
+                yaw2 = botPose1.getOrientation().getYaw();
+                telemetry.addLine(String.format("MT2 Location %6.2f %6.2f (m)",x2,y2));
+                telemetry.addData("MT2 rotation", String.format(" %.2f",yaw2));
+            }
         }
     }
 
@@ -124,7 +142,6 @@ public class GoalTagLimelight {
 
                 isDataCurrent = true;
 
-                telemetry.addData("MT1 Location", "(" + x + ", " + y + ")");
             } else {
                 isDataCurrent = false;
             }
@@ -183,14 +200,6 @@ public class GoalTagLimelight {
     public int getPipeline() {return limelight.getStatus().getPipelineIndex();}
     public int getTeam() {
       return teamID;
-    }
-    public double getX()
-    {
-        return x;
-    }
-    public double getY()
-    {
-        return y;
     }
     public double getRange() {
         return goalRange;

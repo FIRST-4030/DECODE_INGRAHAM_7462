@@ -53,7 +53,7 @@ import org.firstinspires.ftc.teamcode.Shooter;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
-@TeleOp(name = "Mecanum TeleOp 7462", group = "Robot")
+@TeleOp(name = "Mecanum TeleOp 7462 Megatag", group = "Robot")
 //@Disabled //comment this out when ready to add to android phone
 public class MecanumTeleOp7462MegaTag2 extends OpMode {
     GoalTagLimelight limelight;
@@ -125,6 +125,7 @@ public class MecanumTeleOp7462MegaTag2 extends OpMode {
     public void init_loop() {
         telemetry.addData("Pattern", limelight.getObelisk());
         telemetry.addData("team ID", limelight.getID());
+        limelight.processRobotPose(telemetry);
 
         telemetry.addLine("Bumpers to shoot, a to turntotag");
         telemetry.addLine("Press b for red, x for blue");
