@@ -30,6 +30,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -37,6 +38,9 @@ import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.teamcode.Shooter;
 
 /*
@@ -74,6 +78,8 @@ public class MecanumTeleOp7462MegaTag2 extends OpMode {
     ElapsedTime sequenceTimer = new ElapsedTime();
 
     Chassis ch;
+
+    IMU imu;
     private double idlePower = 20;
     private double kP = 0.3; // was 0.14 before adding 0 breaking
     private boolean leftIsRunning;
@@ -89,6 +95,8 @@ public class MecanumTeleOp7462MegaTag2 extends OpMode {
     private boolean shootSquenceStep3;
     private boolean emergencyMode = false;
     private boolean slowChildMode = false;
+
+    double startHeading = 0;
 
     @Override
     public void init() {
@@ -114,6 +122,9 @@ public class MecanumTeleOp7462MegaTag2 extends OpMode {
         if ((GlobalStorage.getAlliance() != -1)) {
             limelight.teamID = GlobalStorage.getAlliance();
         }
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.resetYaw();
+        limelight.setRobotHeading(startHeading);
         timerLeft.reset();
         timerRight.reset();
         timerFlipper.reset();
@@ -143,7 +154,7 @@ public class MecanumTeleOp7462MegaTag2 extends OpMode {
 
     @Override
     public void start() {
-        collectorFront.setPower(Shooter.collectorPower);
+          collectorFront.setPower(Shooter.collectorPower);
         collectorBack.setPower(Shooter.collectorPower);
     }
 
