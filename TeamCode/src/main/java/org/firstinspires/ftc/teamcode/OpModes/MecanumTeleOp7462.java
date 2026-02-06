@@ -30,12 +30,11 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Const;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
@@ -65,6 +64,11 @@ public class MecanumTeleOp7462 extends OpMode {
     Shooter shooterLeft;
     Shooter shooterRight;
 
+
+    private DistanceSensor middleSensor;
+    private DistanceSensor leftSensor;
+
+    private DistanceSensor rightSensor;
     Servo launchFlapLeft;
     Servo launchFlapRight;
     Servo flipper;
@@ -102,6 +106,10 @@ public class MecanumTeleOp7462 extends OpMode {
 
         ch = new Chassis(hardwareMap);
 
+        middleSensor = hardwareMap.get(DistanceSensor.class, "middleSensor");
+        leftSensor = hardwareMap.get(DistanceSensor.class, "leftSensor");
+        rightSensor = hardwareMap.get(DistanceSensor.class, "rightSensor");
+
         collectorFront = new Shooter(hardwareMap, "collectorFront", false);
         collectorBack = new Shooter(hardwareMap, "collectorBack", false);
 
@@ -120,8 +128,6 @@ public class MecanumTeleOp7462 extends OpMode {
         timerLeft.reset();
         timerRight.reset();
         timerFlipper.reset();
-
-
     }
 
     @Override
@@ -131,6 +137,15 @@ public class MecanumTeleOp7462 extends OpMode {
 
         telemetry.addLine("Bumpers to shoot, a to turntotag");
         telemetry.addLine("Press b for red, x for blue");
+//        telemetry.addData("Normalized color red", middleSensor.getNormalizedColors().red);
+//        telemetry.addData("Normalized color green", middleSensor.getNormalizedColors().green);
+//        telemetry.addData("Normalized color blue", middleSensor.getNormalizedColors().blue);
+        telemetry.addData("mdist(in)", middleSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("ldist(in)", leftSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("rist(in)", rightSensor.getDistance(DistanceUnit.INCH));
+        //telemetry.addData("status", middleSensor.status());
+
+
         telemetry.update();
         if (gamepad1.bWasPressed()) {
             limelight.teamID = 24;
