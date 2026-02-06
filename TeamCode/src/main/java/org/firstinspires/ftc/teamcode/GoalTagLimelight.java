@@ -1,20 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.pedropathing.ftc.InvertedFTCCoordinates;
-import com.pedropathing.ftc.PoseConverter;
-import com.pedropathing.geometry.PedroCoordinates;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -28,6 +20,7 @@ public class GoalTagLimelight {
 
     public int teamID;
 
+
     public boolean GPP = false; // id 21
     public boolean PGP = false; // id 22
     public boolean PPG = true; // id 23
@@ -40,6 +33,7 @@ public class GoalTagLimelight {
 
     public boolean isDataCurrent;
     IMU imu;
+    Pose3D botPose1;
     //Pipeline 5 is 20(blue) pipeline 1 is 24(red)
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -62,7 +56,6 @@ public class GoalTagLimelight {
         if (fiducials.isEmpty()) {
             seeObelisk = false;
         }
-
         for (LLResultTypes.FiducialResult fiducial : fiducials) {
             int tagId = fiducial.getFiducialId();
             if (tagId == 21) {
@@ -99,7 +92,7 @@ public class GoalTagLimelight {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
             Pose3D botPose = result.getBotpose();
-            Pose3D botPose1 = result.getBotpose_MT2();
+            botPose1 = result.getBotpose_MT2();
             limelight.updateRobotOrientation(botPose.getOrientation().getYaw());
             if (botPose != null) {
                 x = botPose.getPosition().x;
@@ -185,6 +178,15 @@ public class GoalTagLimelight {
     public void setPipeline(int id) {
         limelight.pipelineSwitch(id);
         teamID = id;
+    }
+    public void setRobotHeading(double heading){
+//        Position position = botPose1.getPosition();
+//        double pitch = botPose1.getOrientation().getPitch();
+//        double roll = botPose1.getOrientation().getRoll();
+//        long time = botPose1.getOrientation().getAcquisitionTime();
+//        double yaw = heading;
+//        YawPitchRollAngles angles = new YawPitchRollAngles(AngleUnit.DEGREES, yaw, pitch, roll, time);
+          limelight.updateRobotOrientation(heading);
     }
     public String getObelisk() {
         if (PGP) {
