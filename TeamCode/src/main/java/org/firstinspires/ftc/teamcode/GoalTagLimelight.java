@@ -188,6 +188,9 @@ public class GoalTagLimelight {
 //        YawPitchRollAngles angles = new YawPitchRollAngles(AngleUnit.DEGREES, yaw, pitch, roll, time);
           limelight.updateRobotOrientation(heading);
     }
+    public YawPitchRollAngles getRobotHeading(){
+        return limelight.getLatestResult().getBotpose_MT2().getOrientation();
+    }
     public String getObelisk() {
         if (PGP) {
             return "PGP";

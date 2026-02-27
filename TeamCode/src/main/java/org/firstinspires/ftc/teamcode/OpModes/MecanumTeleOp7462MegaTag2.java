@@ -165,7 +165,7 @@ public class MecanumTeleOp7462MegaTag2 extends OpMode {
         shooterRight.overridePower();
         shooterLeft.overridePower();
 
-
+        telemetry.addData("robotHeading", limelight.getRobotHeading());
         telemetry.addData("shooterLeftCurrentVelocity", shooterLeft.getVelocity());
         telemetry.addData("shooterLeftTargetVelocity", shooterLeft.targetVelocity);
         telemetry.addData("shooterRightCurrentVelocity", shooterRight.getVelocity());
