@@ -67,7 +67,6 @@ public class MecanumTeleOp7462 extends OpMode {
 
     private DistanceSensor middleSensor;
     private DistanceSensor leftSensor;
-
     private DistanceSensor rightSensor;
     Servo launchFlapLeft;
     Servo launchFlapRight;
@@ -79,6 +78,7 @@ public class MecanumTeleOp7462 extends OpMode {
     ElapsedTime timerRight = new ElapsedTime();
     ElapsedTime timerFlipper = new ElapsedTime();
     ElapsedTime sequenceTimer = new ElapsedTime();
+    ElapsedTime flipTimer = new ElapsedTime();
 
     Chassis ch;
     private double idlePower = 20;
@@ -96,6 +96,9 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean shootSquenceStep3;
     private boolean emergencyMode = false;
     private boolean slowChildMode = false;
+    private boolean ballLeft = false;
+    private boolean ballRight = false;
+    private boolean ballMiddle = false;
 
     @Override
     public void init() {
@@ -184,6 +187,40 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("shootSequence step 2", shootSquenceStep2);
         telemetry.addData("shooter not running?",(!(leftIsRunning || rightIsRunning)));
         telemetry.update();
+
+        if (leftSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+            ballLeft = true;
+        } else {
+            ballLeft = false;
+        }
+
+        if (middleSensor.getDistance(DistanceUnit.INCH) < 4) {
+            ballMiddle = true;
+        } else {
+            ballMiddle = false;
+        }
+
+        if (rightSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+            ballRight = true;
+        } else {
+            ballRight = false;
+        }
+
+        if (!ballLeft && ballMiddle) {
+            flipper.setPosition(Constants.flipperLeft);
+            timerFlipper.reset();
+            flipTimer.reset();
+        } else if (!ballRight && ballMiddle && flipTimer.seconds() > 1) {
+            flipper.setPosition(Constants.flipperRight);
+            timerFlipper.reset();
+        } else if (ballLeft && ballRight && ballMiddle){
+            collectorBack.setPower(0);
+            collectorFront.setPower(0);
+        } else {
+            collectorBack.setPower(Shooter.collectorPower);
+            collectorFront.setPower(Shooter.collectorPower);
+        }
+
 
         if (gamepad1.leftBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
             // do math here
@@ -311,7 +348,7 @@ public class MecanumTeleOp7462 extends OpMode {
             launchFlapRight.setPosition(Constants.rightFlapDown);
             shooterRight.targetVelocity = idlePower;
         }
-        if (timerFlipper.seconds() > 0.25) {
+        if (timerFlipper.seconds() > 0.5) {
             flipper.setPosition(0.525);
         }
         // If camera not working press this and shoot near point of close V.
