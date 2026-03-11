@@ -30,12 +30,11 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Const;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
@@ -65,6 +64,10 @@ public class MecanumTeleOp7462 extends OpMode {
     Shooter shooterLeft;
     Shooter shooterRight;
 
+
+    private DistanceSensor middleSensor;
+    private DistanceSensor leftSensor;
+    private DistanceSensor rightSensor;
     Servo launchFlapLeft;
     Servo launchFlapRight;
     Servo flipper;
@@ -73,25 +76,20 @@ public class MecanumTeleOp7462 extends OpMode {
     // Timers
     ElapsedTime timerLeft = new ElapsedTime();
     ElapsedTime timerRight = new ElapsedTime();
-    ElapsedTime timerFlipper = new ElapsedTime();
+    ElapsedTime timerFlipper = new ElapsedTime(); // Timer to reset flipper to middle position
     ElapsedTime sequenceTimer = new ElapsedTime();
+    ElapsedTime flipDelay = new ElapsedTime(); // Timer to delay flip right after flipping left
 
     Chassis ch;
-    private double idlePower = 20;
-    private double kP = 0.3; // was 0.14 before adding 0 breaking
+    private double idlePower = 0; //20
     private boolean leftIsRunning;
     private boolean rightIsRunning;
-    private boolean shootSequence;
-
-    private double shootSequencetime;
-
-    private boolean shootSquenceStep1 = true;
-
-    private boolean shootSquenceStep2;
-
-    private boolean shootSquenceStep3;
     private boolean emergencyMode = false;
     private boolean slowChildMode = false;
+    private boolean ballLeft = false;
+    private boolean ballRight = false;
+    private boolean ballMiddle = false;
+    private boolean manualFlip = false;
 
     @Override
     public void init() {
@@ -101,6 +99,10 @@ public class MecanumTeleOp7462 extends OpMode {
         flipper = hardwareMap.get(Servo.class, "flipper");
 
         ch = new Chassis(hardwareMap);
+
+        middleSensor = hardwareMap.get(DistanceSensor.class, "middleSensor");
+        leftSensor = hardwareMap.get(DistanceSensor.class, "leftSensor");
+        rightSensor = hardwareMap.get(DistanceSensor.class, "rightSensor");
 
         collectorFront = new Shooter(hardwareMap, "collectorFront", false);
         collectorBack = new Shooter(hardwareMap, "collectorBack", false);
@@ -120,8 +122,6 @@ public class MecanumTeleOp7462 extends OpMode {
         timerLeft.reset();
         timerRight.reset();
         timerFlipper.reset();
-
-
     }
 
     @Override
@@ -131,6 +131,15 @@ public class MecanumTeleOp7462 extends OpMode {
 
         telemetry.addLine("Bumpers to shoot, a to turntotag");
         telemetry.addLine("Press b for red, x for blue");
+//        telemetry.addData("Normalized color red", middleSensor.getNormalizedColors().red);
+//        telemetry.addData("Normalized color green", middleSensor.getNormalizedColors().green);
+//        telemetry.addData("Normalized color blue", middleSensor.getNormalizedColors().blue);
+        telemetry.addData("mdist(in)", middleSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("ldist(in)", leftSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("rist(in)", rightSensor.getDistance(DistanceUnit.INCH));
+        //telemetry.addData("status", middleSensor.status());
+
+
         telemetry.update();
         if (gamepad1.bWasPressed()) {
             limelight.teamID = 24;
@@ -156,26 +165,61 @@ public class MecanumTeleOp7462 extends OpMode {
         shooterRight.overridePower();
         shooterLeft.overridePower();
 
-
         telemetry.addData("shooterLeftCurrentVelocity", shooterLeft.getVelocity());
         telemetry.addData("shooterLeftTargetVelocity", shooterLeft.targetVelocity);
         telemetry.addData("shooterRightCurrentVelocity", shooterRight.getVelocity());
         telemetry.addData("shooterRightTargetVelocity", shooterRight.targetVelocity);
         telemetry.addData("collectorFrontCurrentPower", collectorFront.getPower());
         telemetry.addData("collectorBackCurrentPower", collectorBack.getPower());
-        telemetry.addData("Kp", kP);
         telemetry.addData("TimerLeft", timerLeft.seconds());
-        telemetry.addData("time", shootSequencetime);
-        telemetry.addData("shootSequence step 2", shootSquenceStep2);
         telemetry.addData("shooter not running?",(!(leftIsRunning || rightIsRunning)));
         telemetry.update();
+
+        if (leftSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+            ballLeft = true;
+        } else {
+            ballLeft = false;
+        }
+
+        if (middleSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+            ballMiddle = true;
+        } else {
+            ballMiddle = false;
+        }
+
+        if (rightSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+            ballRight = true;
+        } else {
+            ballRight = false;
+        }
+
+        if (!manualFlip) {
+            if (!ballLeft && ballMiddle && timerLeft.seconds() > 0.5) {
+                flipper.setPosition(Constants.flipperLeft);
+                timerFlipper.reset();
+                flipDelay.reset();
+            } else if (!ballRight && ballMiddle && flipDelay.seconds() > 1 && timerRight.seconds() > 0.5) {
+                flipper.setPosition(Constants.flipperRight);
+                timerFlipper.reset();
+            } else if (ballLeft && ballRight && ballMiddle) {
+                if (!gamepad1.dpad_up) {
+                    collectorBack.setPower(0);
+                    collectorFront.setPower(0);
+                }
+            } else {
+                if (!gamepad1.dpad_up) {
+                    collectorBack.setPower(Shooter.collectorPower);
+                    collectorFront.setPower(Shooter.collectorPower);
+                }
+            }
+        }
 
         if (gamepad1.leftBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
             // do math here
             //shooterLeft.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
             //shooterLeft.targetVelocity = (limelight.getRange()+100.99)/7.3712;
             if (!emergencyMode) {
-                shooterLeft.targetVelocity = shooterRight.getShooterVelo(limelight);
+                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
             }
             leftIsRunning = true;
             timerLeft.reset();
@@ -189,6 +233,11 @@ public class MecanumTeleOp7462 extends OpMode {
             }
             rightIsRunning = true;
             timerRight.reset();
+        }
+        if (gamepad1.dpadDownWasPressed()) {
+            manualFlip = true;
+            collectorBack.setPower(Shooter.collectorPower);
+            collectorFront.setPower(Shooter.collectorPower);
         }
         if (gamepad1.yWasPressed()) {
             idlePower = 0;
@@ -232,46 +281,7 @@ public class MecanumTeleOp7462 extends OpMode {
             ch.setMaxSpeed(1);
         }
         ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-//        if (gamepad1.left_trigger == 1 && limelight.isDataCurrent) {
-//            shootSequence = true;
-//            shootSquenceStep1 = true;
-//        }
-//        if(shootSequence) {
-//            if(shootSquenceStep1) {
-//                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
-//                shooterRight.targetVelocity = shooterRight.getShooterVelo(limelight);
-//                leftIsRunning = true;
-//                rightIsRunning = true;
-//                timerLeft.reset();
-//                timerRight.reset();
-//                shootSquenceStep1 = false;
-//                shootSquenceStep2 = true;
-//                sequenceTimer.reset();
-//            }
-//            shootSequencetime = sequenceTimer.seconds();
-//            if(!(launchFlapLeft.getPosition() == Constants.leftFlapDown || launchFlapRight.getPosition() == Constants.rightFlapDown || shootSquenceStep1)){
-//                sequenceTimer.reset();
-//            }
-//            if(sequenceTimer.seconds() > 0.5 && shootSquenceStep2){
-//                flipper.setPosition(1);
-//                timerFlipper.reset();
-//                shootSquenceStep3 = true;
-//                sequenceTimer.reset();
-//                shootSquenceStep2 = false;
-//            }
-//            if(!(flipper.getPosition() == 0.525)){
-//                sequenceTimer.reset();
-//            }
-//            if(shootSquenceStep3 && sequenceTimer.seconds() > 0.5) {
-//                shooterLeft.targetVelocity = shooterLeft.getShooterVelo(limelight);
-//                timerLeft.reset();
-//                launchFlapLeft.setPosition(Constants.leftFlapUp);
-//                leftIsRunning = true;
-//                shootSquenceStep3 = false;
-//                shootSequence = false;
-//            }
 
-        //}
         // Shoot when at speed
         if (leftIsRunning) {
             if (shooterLeft.atSpeed()) {

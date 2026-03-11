@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.Servo;
  * @author Dennis O'Brien
  * @date 11/13/2025
  */
-@Disabled
 @TeleOp(name = "ServoTester", group="Util")
 public class ServoTester extends OpMode {
 
@@ -21,7 +20,7 @@ public class ServoTester extends OpMode {
 
     Servo   servo;
     double  position = 0.5;
-    double increment = 0.05;
+    double increment = 0.01;
 
     @Override
     public void init() {
