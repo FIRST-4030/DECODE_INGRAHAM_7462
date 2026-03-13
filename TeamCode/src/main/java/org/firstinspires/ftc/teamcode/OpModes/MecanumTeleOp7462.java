@@ -39,6 +39,7 @@ import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
+import org.firstinspires.ftc.teamcode.RunningAverage;
 import org.firstinspires.ftc.teamcode.Shooter;
 
 /*
@@ -91,6 +92,10 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean ballMiddle = false;
     private boolean manualFlip = false;
 
+    private RunningAverage leftDist = new RunningAverage(50);
+    private RunningAverage midDist = new RunningAverage(50);
+    private RunningAverage rightDist = new RunningAverage(50);
+
     @Override
     public void init() {
         launchFlapLeft = hardwareMap.get(Servo.class, "launchFlapLeft");
@@ -134,11 +139,10 @@ public class MecanumTeleOp7462 extends OpMode {
 //        telemetry.addData("Normalized color red", middleSensor.getNormalizedColors().red);
 //        telemetry.addData("Normalized color green", middleSensor.getNormalizedColors().green);
 //        telemetry.addData("Normalized color blue", middleSensor.getNormalizedColors().blue);
-        telemetry.addData("mdist(in)", middleSensor.getDistance(DistanceUnit.INCH));
-        telemetry.addData("ldist(in)", leftSensor.getDistance(DistanceUnit.INCH));
-        telemetry.addData("rist(in)", rightSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("mdist(in)", midDist.getAverage());
+        telemetry.addData("ldist(in)", leftDist.getAverage());
+        telemetry.addData("rist(in)", rightDist.getAverage());
         //telemetry.addData("status", middleSensor.status());
-
 
         telemetry.update();
         if (gamepad1.bWasPressed()) {
@@ -175,19 +179,23 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("shooter not running?",(!(leftIsRunning || rightIsRunning)));
         telemetry.update();
 
-        if (leftSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+        leftDist.addNumber(Math.max(6, leftSensor.getDistance(DistanceUnit.INCH)));
+        midDist.addNumber(Math.max(6, middleSensor.getDistance(DistanceUnit.INCH)));
+        rightDist.addNumber(Math.max(6, rightSensor.getDistance(DistanceUnit.INCH)));
+
+        if (leftDist.getAverage() < 6.5) {
             ballLeft = true;
         } else {
             ballLeft = false;
         }
 
-        if (middleSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+        if (midDist.getAverage() < 6.5) {
             ballMiddle = true;
         } else {
             ballMiddle = false;
         }
 
-        if (rightSensor.getDistance(DistanceUnit.INCH) < 6.5) {
+        if (rightDist.getAverage() < 6.5) {
             ballRight = true;
         } else {
             ballRight = false;
