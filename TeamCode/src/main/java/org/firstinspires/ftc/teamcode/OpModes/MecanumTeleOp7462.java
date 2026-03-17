@@ -92,9 +92,9 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean ballMiddle = false;
     private boolean manualFlip = false;
 
-    private RunningAverage leftDist = new RunningAverage(50);
-    private RunningAverage midDist = new RunningAverage(50);
-    private RunningAverage rightDist = new RunningAverage(50);
+    private RunningAverage leftDist = new RunningAverage(25);
+    private RunningAverage midDist = new RunningAverage(25);
+    private RunningAverage rightDist = new RunningAverage(25);
 
     @Override
     public void init() {
