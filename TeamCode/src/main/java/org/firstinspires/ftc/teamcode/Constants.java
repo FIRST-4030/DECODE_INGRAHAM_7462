@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
     public static final double leftFlapUp = 0.0;
     public static final double leftFlapDown = 0.35;
-    public static final double rightFlapUp = 0.75;
+    public static final double rightFlapUp = 0.73;
     public static final double rightFlapDown = 0.35;
     public static final double liftExtend = 0.1;
     public static final double liftRetract = 0.76;

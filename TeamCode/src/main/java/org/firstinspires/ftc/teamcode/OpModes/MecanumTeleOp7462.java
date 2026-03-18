@@ -92,9 +92,11 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean ballMiddle = false;
     private boolean manualFlip = false;
 
-    private RunningAverage leftDist = new RunningAverage(25);
-    private RunningAverage midDist = new RunningAverage(25);
-    private RunningAverage rightDist = new RunningAverage(25);
+    ElapsedTime sensorTimer = new ElapsedTime();
+
+    private RunningAverage leftDist = new RunningAverage(5);
+    private RunningAverage midDist = new RunningAverage(5);
+    private RunningAverage rightDist = new RunningAverage(5);
 
     @Override
     public void init() {
@@ -160,6 +162,7 @@ public class MecanumTeleOp7462 extends OpMode {
     public void start() {
         collectorFront.setPower(Shooter.collectorPower);
         collectorBack.setPower(Shooter.collectorPower);
+        ch.setkPTurn(0.5);
     }
 
     @Override
@@ -177,11 +180,20 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("collectorBackCurrentPower", collectorBack.getPower());
         telemetry.addData("TimerLeft", timerLeft.seconds());
         telemetry.addData("shooter not running?",(!(leftIsRunning || rightIsRunning)));
+        telemetry.addData("mdist(in)", midDist.getAverage());
+        telemetry.addData("ldist(in)", leftDist.getAverage());
+        telemetry.addData("rist(in)", rightDist.getAverage());
         telemetry.update();
 
-        leftDist.addNumber(Math.max(6, leftSensor.getDistance(DistanceUnit.INCH)));
-        midDist.addNumber(Math.max(6, middleSensor.getDistance(DistanceUnit.INCH)));
-        rightDist.addNumber(Math.max(6, rightSensor.getDistance(DistanceUnit.INCH)));
+        if (sensorTimer.milliseconds() > 100) {
+
+            leftDist.addNumber(Math.max(6, leftSensor.getDistance(DistanceUnit.INCH)));
+            midDist.addNumber(Math.max(6, middleSensor.getDistance(DistanceUnit.INCH)));
+            rightDist.addNumber(Math.max(6, rightSensor.getDistance(DistanceUnit.INCH)));
+
+            sensorTimer.reset();
+        }
+
 
         if (leftDist.getAverage() < 6.5) {
             ballLeft = true;
