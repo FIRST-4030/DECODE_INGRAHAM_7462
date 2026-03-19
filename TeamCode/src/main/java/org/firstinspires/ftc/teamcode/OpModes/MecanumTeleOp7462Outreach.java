@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.DistSensor;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
 import org.firstinspires.ftc.teamcode.Shooter;
@@ -61,6 +62,7 @@ public class MecanumTeleOp7462Outreach extends OpMode {
     Shooter collectorFront;
     Shooter shooterLeft;
     Shooter shooterRight;
+    DistSensor sensor;
 
     Servo launchFlapLeft;
     Servo launchFlapRight;
@@ -118,6 +120,9 @@ public class MecanumTeleOp7462Outreach extends OpMode {
         timerRight.reset();
         timerFlipper.reset();
 
+        sensor = new DistSensor();
+        sensor.init(hardwareMap);
+
 
     }
 
@@ -150,6 +155,7 @@ public class MecanumTeleOp7462Outreach extends OpMode {
 
     @Override
     public void loop() {
+        sensor.loop(flipper, timerFlipper, timerLeft, timerRight, collectorBack, collectorFront, gamepad1);
         limelight.process(telemetry);
 
         shooterRight.overridePower();
