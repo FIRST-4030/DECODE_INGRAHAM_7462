@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.DistSensor;
 import org.firstinspires.ftc.teamcode.GlobalStorage;
 import org.firstinspires.ftc.teamcode.GoalTagLimelight;
 import org.firstinspires.ftc.teamcode.RunningAverage;
@@ -64,8 +65,6 @@ public class MecanumTeleOp7462 extends OpMode {
     Shooter collectorFront;
     Shooter shooterLeft;
     Shooter shooterRight;
-
-
     private DistanceSensor middleSensor;
     private DistanceSensor leftSensor;
     private DistanceSensor rightSensor;
@@ -91,6 +90,8 @@ public class MecanumTeleOp7462 extends OpMode {
     private boolean ballRight = false;
     private boolean ballMiddle = false;
     private boolean manualFlip = false;
+    DistSensor sensor;
+
 
     ElapsedTime sensorTimer = new ElapsedTime();
 
@@ -129,6 +130,9 @@ public class MecanumTeleOp7462 extends OpMode {
         timerLeft.reset();
         timerRight.reset();
         timerFlipper.reset();
+
+        sensor = new DistSensor();
+        sensor.init(hardwareMap);
     }
 
     @Override
@@ -167,6 +171,7 @@ public class MecanumTeleOp7462 extends OpMode {
 
     @Override
     public void loop() {
+        sensor.loop(flipper, timerFlipper, timerLeft, timerRight, collectorBack, collectorFront, gamepad1, manualFlip);
         limelight.process(telemetry);
 
         shooterRight.overridePower();
@@ -185,54 +190,6 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("rist(in)", rightDist.getAverage());
         telemetry.update();
 
-        if (sensorTimer.milliseconds() > 100) {
-
-            leftDist.addNumber(Math.max(6, leftSensor.getDistance(DistanceUnit.INCH)));
-            midDist.addNumber(Math.max(6, middleSensor.getDistance(DistanceUnit.INCH)));
-            rightDist.addNumber(Math.max(6, rightSensor.getDistance(DistanceUnit.INCH)));
-
-            sensorTimer.reset();
-        }
-
-
-        if (leftDist.getAverage() < 6.5) {
-            ballLeft = true;
-        } else {
-            ballLeft = false;
-        }
-
-        if (midDist.getAverage() < 6.5) {
-            ballMiddle = true;
-        } else {
-            ballMiddle = false;
-        }
-
-        if (rightDist.getAverage() < 6.5) {
-            ballRight = true;
-        } else {
-            ballRight = false;
-        }
-
-        if (!manualFlip) {
-            if (!ballLeft && ballMiddle && timerLeft.seconds() > 0.5) {
-                flipper.setPosition(Constants.flipperLeft);
-                timerFlipper.reset();
-                flipDelay.reset();
-            } else if (!ballRight && ballMiddle && flipDelay.seconds() > 1 && timerRight.seconds() > 0.5) {
-                flipper.setPosition(Constants.flipperRight);
-                timerFlipper.reset();
-            } else if (ballLeft && ballRight && ballMiddle) {
-                if (!gamepad1.dpad_up) {
-                    collectorBack.setPower(0);
-                    collectorFront.setPower(0);
-                }
-            } else {
-                if (!gamepad1.dpad_up) {
-                    collectorBack.setPower(Shooter.collectorPower);
-                    collectorFront.setPower(Shooter.collectorPower);
-                }
-            }
-        }
 
         if (gamepad1.leftBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
             // do math here

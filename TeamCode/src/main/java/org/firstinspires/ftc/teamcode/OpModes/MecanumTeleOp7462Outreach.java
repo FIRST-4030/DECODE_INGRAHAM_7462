@@ -63,6 +63,7 @@ public class MecanumTeleOp7462Outreach extends OpMode {
     Shooter shooterLeft;
     Shooter shooterRight;
     DistSensor sensor;
+    private boolean manualFlip = false;
 
     Servo launchFlapLeft;
     Servo launchFlapRight;
@@ -155,7 +156,7 @@ public class MecanumTeleOp7462Outreach extends OpMode {
 
     @Override
     public void loop() {
-        sensor.loop(flipper, timerFlipper, timerLeft, timerRight, collectorBack, collectorFront, gamepad1);
+        sensor.loop(flipper, timerFlipper, timerLeft, timerRight, collectorBack, collectorFront, gamepad1, manualFlip);
         limelight.process(telemetry);
 
         shooterRight.overridePower();
@@ -191,6 +192,9 @@ public class MecanumTeleOp7462Outreach extends OpMode {
         if (gamepad1.dpadUpWasReleased()) {
             collectorFront.setPower(Shooter.collectorPower);
             collectorBack.setPower(Shooter.collectorPower);
+        }
+        if (gamepad1.dpadDownWasPressed()) {
+            manualFlip = true;
         }
 
 

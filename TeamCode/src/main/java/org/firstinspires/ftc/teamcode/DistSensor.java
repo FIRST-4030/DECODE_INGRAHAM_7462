@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 public class DistSensor {
-    private boolean manualFlip = false;
     private DistanceSensor middleSensor;
     private DistanceSensor leftSensor;
     private DistanceSensor rightSensor;
@@ -31,7 +30,7 @@ public class DistSensor {
         rightSensor = hardwareMap.get(DistanceSensor.class, "rightSensor");
     }
 
-    public void loop(Servo flipper, ElapsedTime timerFlipper, ElapsedTime timerLeft, ElapsedTime timerRight, Shooter collectorBack, Shooter collectorFront, Gamepad gamepad1) {
+    public void loop(Servo flipper, ElapsedTime timerFlipper, ElapsedTime timerLeft, ElapsedTime timerRight, Shooter collectorBack, Shooter collectorFront, Gamepad gamepad1, boolean manualFlip) {
         if (sensorTimer.milliseconds() > 100) {
 
             leftDist.addNumber(Math.max(6, leftSensor.getDistance(DistanceUnit.INCH)));
@@ -40,7 +39,6 @@ public class DistSensor {
 
             sensorTimer.reset();
         }
-
 
         if (leftDist.getAverage() < 6.5) {
             ballLeft = true;
