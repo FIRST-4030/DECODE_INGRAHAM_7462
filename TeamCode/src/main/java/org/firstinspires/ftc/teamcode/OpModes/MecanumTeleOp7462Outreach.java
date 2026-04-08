@@ -161,7 +161,8 @@ public class MecanumTeleOp7462Outreach extends OpMode {
 
         shooterRight.overridePower();
         shooterLeft.overridePower();
-        telemetry.addData("kpturn", ch.kPTurn);
+        telemetry.addData("Manual Override? ", manualFlip);
+        //telemetry.addData("kpturn", ch.kPTurn);
         telemetry.update();
 
         if (gamepad1.rightBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
@@ -194,9 +195,12 @@ public class MecanumTeleOp7462Outreach extends OpMode {
             collectorBack.setPower(Shooter.collectorPower);
         }
         if (gamepad1.dpadDownWasPressed()) {
-            manualFlip = true;
+            if (!manualFlip) {
+                manualFlip = true;
+            } else {
+                manualFlip = false;
+            }
         }
-
 
         if (!rightIsRunning && (launchFlapRight.getPosition() == Constants.rightFlapDown)) {
             ch.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
@@ -226,12 +230,12 @@ public class MecanumTeleOp7462Outreach extends OpMode {
             ch.setMaxSpeed(0.5);
         }
 
-        if (gamepad1.yWasPressed()) {
-            ch.kPTurn += 0.01;
-        }
-        if (gamepad1.bWasPressed()) {
-            ch.kPTurn -= 0.01;
-        }
+//        if (gamepad1.yWasPressed()) {
+//            ch.kPTurn += 0.01;
+//        }
+//        if (gamepad1.bWasPressed()) {
+//            ch.kPTurn -= 0.01;
+//        }
         // Servo Reset
         if (timerLeft.seconds() > 0.6 && !leftIsRunning) {
             launchFlapLeft.setPosition(Constants.leftFlapDown);

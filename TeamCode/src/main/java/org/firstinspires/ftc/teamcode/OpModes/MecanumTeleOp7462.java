@@ -188,6 +188,7 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("mdist(in)", midDist.getAverage());
         telemetry.addData("ldist(in)", leftDist.getAverage());
         telemetry.addData("rist(in)", rightDist.getAverage());
+        telemetry.addData("Manual Override? ", manualFlip);
         telemetry.update();
 
 
@@ -210,11 +211,6 @@ public class MecanumTeleOp7462 extends OpMode {
             }
             rightIsRunning = true;
             timerRight.reset();
-        }
-        if (gamepad1.dpadDownWasPressed()) {
-            manualFlip = true;
-            collectorBack.setPower(Shooter.collectorPower);
-            collectorFront.setPower(Shooter.collectorPower);
         }
         if (gamepad1.yWasPressed()) {
             idlePower = 0;
@@ -292,6 +288,14 @@ public class MecanumTeleOp7462 extends OpMode {
             shooterRight.targetVelocity = 30;
             idlePower = 30;
             emergencyMode = true;
+        }
+
+        if (gamepad1.dpadDownWasPressed()) {
+            if (!manualFlip) {
+                manualFlip = true;
+            } else {
+                manualFlip = false;
+            }
         }
     }
 }
