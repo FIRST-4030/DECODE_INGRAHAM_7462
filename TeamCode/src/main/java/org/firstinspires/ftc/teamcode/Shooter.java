@@ -84,21 +84,21 @@ public class Shooter {
         if (limelight.getObelisk().equals("PGP")) {
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             fireShooterRight(velRight, shooterRight, launchFlapRight);
-            flipper.setPosition(1);
-            opMode.sleep(500);
+            flipper.setPosition(Constants.flipperLeft);
+            opMode.sleep(800);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             flipper.setPosition(0.525);
         } else if (limelight.getObelisk().equals("GPP")) {
             fireShooterRight(velRight, shooterRight, launchFlapRight);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
-            flipper.setPosition(1);
-            opMode.sleep(500);
+            flipper.setPosition(Constants.flipperLeft);
+            opMode.sleep(800);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             flipper.setPosition(0.525);
         } else if (limelight.getObelisk().equals("PPG")) {
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
-            flipper.setPosition(1);
-            opMode.sleep(500);
+            flipper.setPosition(Constants.flipperLeft);
+            opMode.sleep(800);
             fireShooterLeft(velLeft, shooterLeft, launchFlapLeft);
             fireShooterRight(velRight, shooterRight, launchFlapRight);
             flipper.setPosition(0.525);
