@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
@@ -78,5 +79,11 @@ public class DistSensor {
                 }
             }
         }
+    }
+
+    public void displaySensorStats(Telemetry telemetry) {
+        telemetry.addData("mdist(in)", midDist.getAverage());
+        telemetry.addData("ldist(in)", leftDist.getAverage());
+        telemetry.addData("rist(in)", rightDist.getAverage());
     }
 }

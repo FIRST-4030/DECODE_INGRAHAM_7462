@@ -57,7 +57,7 @@ import org.firstinspires.ftc.teamcode.Shooter;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
-@TeleOp(name = "Mecanum TeleOp 7462", group = "Robot")
+@TeleOp(name = "TeleOp 7462", group = "Robot")
 //@Disabled //comment this out when ready to add to android phone
 public class MecanumTeleOp7462 extends OpMode {
     GoalTagLimelight limelight;
@@ -95,9 +95,9 @@ public class MecanumTeleOp7462 extends OpMode {
 
     ElapsedTime sensorTimer = new ElapsedTime();
 
-    private RunningAverage leftDist = new RunningAverage(5);
-    private RunningAverage midDist = new RunningAverage(5);
-    private RunningAverage rightDist = new RunningAverage(5);
+//    private RunningAverage leftDist = new RunningAverage(5);
+//    private RunningAverage midDist = new RunningAverage(5);
+//    private RunningAverage rightDist = new RunningAverage(5);
 
     @Override
     public void init() {
@@ -108,9 +108,9 @@ public class MecanumTeleOp7462 extends OpMode {
 
         ch = new Chassis(hardwareMap);
 
-        middleSensor = hardwareMap.get(DistanceSensor.class, "middleSensor");
-        leftSensor = hardwareMap.get(DistanceSensor.class, "leftSensor");
-        rightSensor = hardwareMap.get(DistanceSensor.class, "rightSensor");
+//        middleSensor = hardwareMap.get(DistanceSensor.class, "middleSensor");
+//        leftSensor = hardwareMap.get(DistanceSensor.class, "leftSensor");
+//        rightSensor = hardwareMap.get(DistanceSensor.class, "rightSensor");
 
         collectorFront = new Shooter(hardwareMap, "collectorFront", false);
         collectorBack = new Shooter(hardwareMap, "collectorBack", false);
@@ -145,9 +145,7 @@ public class MecanumTeleOp7462 extends OpMode {
 //        telemetry.addData("Normalized color red", middleSensor.getNormalizedColors().red);
 //        telemetry.addData("Normalized color green", middleSensor.getNormalizedColors().green);
 //        telemetry.addData("Normalized color blue", middleSensor.getNormalizedColors().blue);
-        telemetry.addData("mdist(in)", midDist.getAverage());
-        telemetry.addData("ldist(in)", leftDist.getAverage());
-        telemetry.addData("rist(in)", rightDist.getAverage());
+
         //telemetry.addData("status", middleSensor.status());
 
         telemetry.update();
@@ -185,10 +183,11 @@ public class MecanumTeleOp7462 extends OpMode {
         telemetry.addData("collectorBackCurrentPower", collectorBack.getPower());
         telemetry.addData("TimerLeft", timerLeft.seconds());
         telemetry.addData("shooter not running?",(!(leftIsRunning || rightIsRunning)));
-        telemetry.addData("mdist(in)", midDist.getAverage());
-        telemetry.addData("ldist(in)", leftDist.getAverage());
-        telemetry.addData("rist(in)", rightDist.getAverage());
+//        telemetry.addData("mdist(in)", midDist.getAverage());
+//        telemetry.addData("ldist(in)", leftDist.getAverage());
+//        telemetry.addData("rist(in)", rightDist.getAverage());
         telemetry.addData("Manual Override? ", manualFlip);
+        sensor.displaySensorStats(telemetry);
         telemetry.update();
 
 

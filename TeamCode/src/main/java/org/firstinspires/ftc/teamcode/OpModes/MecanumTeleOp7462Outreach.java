@@ -54,7 +54,7 @@ import org.firstinspires.ftc.teamcode.Shooter;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  *
  */
-@TeleOp(name = "Mecanum TeleOp 7462 Outreach", group = "Robot")
+@TeleOp(name = "TeleOp 7462 Outreach", group = "Robot")
 //@Disabled //comment this out when ready to add to android phone
 public class MecanumTeleOp7462Outreach extends OpMode {
     GoalTagLimelight limelight;

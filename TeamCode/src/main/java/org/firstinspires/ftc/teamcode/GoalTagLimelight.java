@@ -42,15 +42,15 @@ public class GoalTagLimelight {
     private double camera_angle = 0.032; // radians old was 0.0418
 
     public boolean isDataCurrent;
-    IMU imu;
+    //IMU imu;
     //Pipeline 5 is 20(blue) pipeline 1 is 24(red)
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        imu = hardwareMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
-        imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+//                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+//        imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
         telemetry.setMsTransmissionInterval(50);
@@ -90,8 +90,8 @@ public class GoalTagLimelight {
         }
     }
     public void processRobotPose(Telemetry telemetry) {
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        limelight.updateRobotOrientation(orientation.getYaw());
+        //YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        //limelight.updateRobotOrientation(orientation.getYaw());
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
             Pose3D botPose = result.getBotpose_MT2();
