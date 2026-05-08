@@ -165,7 +165,10 @@ public class MecanumTeleOp7462Outreach extends OpMode {
         //telemetry.addData("kpturn", ch.kPTurn);
         telemetry.update();
 
-        if (gamepad1.rightBumperWasPressed() && (limelight.isDataCurrent || emergencyMode)) {
+        if ((gamepad1.rightBumperWasPressed() || gamepad1.leftBumperWasPressed()
+                || gamepad1.right_trigger == 1 || gamepad1.left_trigger == 1)
+
+                && (limelight.isDataCurrent || emergencyMode)) {
             // do math here
             //shooterRight.targetVelocity = (limelight.getRange() + 202.17 - 10) / 8.92124;
             //shooterRight.targetVelocity = (limelight.getRange()+100.99)/7.3712;
