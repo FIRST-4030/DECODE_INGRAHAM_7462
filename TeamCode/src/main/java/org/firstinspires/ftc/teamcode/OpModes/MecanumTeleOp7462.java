@@ -211,7 +211,7 @@ public class MecanumTeleOp7462 extends OpMode {
             rightIsRunning = true;
             timerRight.reset();
         }
-        if (gamepad1.yWasPressed()) {
+        if (sensor.parkingNow) {
             idlePower = 0;
             lift.setPosition(Constants.liftExtend);
             // turn everything off
@@ -223,6 +223,7 @@ public class MecanumTeleOp7462 extends OpMode {
             launchFlapRight.setPosition(Constants.rightFlapDown);
         }
         if (gamepad1.bWasPressed()) {
+            sensor.parkingNow = false;
             lift.setPosition(Constants.liftRetract);
             telemetry.addData("Lift Value", lift.getPosition());
         }

@@ -17,6 +17,7 @@ public class DistSensor {
     private boolean ballLeft = false;
     private boolean ballRight = false;
     private boolean ballMiddle = false;
+    public boolean parkingNow = false;
 
     ElapsedTime sensorTimer = new ElapsedTime();
     ElapsedTime flipDelay = new ElapsedTime();
@@ -59,6 +60,12 @@ public class DistSensor {
             ballRight = false;
         }
 
+        if (gamepad1.yWasPressed()) {
+            parkingNow = true;
+            collectorBack.setPower(0);
+            collectorFront.setPower(0);
+        }
+
         if (!manualFlip) {
             if (!ballLeft && ballMiddle && timerLeft.seconds() > 0.5) {
                 flipper.setPosition(Constants.flipperLeft);
@@ -73,7 +80,7 @@ public class DistSensor {
                     collectorFront.setPower(0);
                 }
             } else {
-                if (!gamepad1.dpad_up) {
+                if (!gamepad1.dpad_up && !parkingNow) {
                     collectorBack.setPower(Shooter.collectorPower);
                     collectorFront.setPower(Shooter.collectorPower);
                 }
