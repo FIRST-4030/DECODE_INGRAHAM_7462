@@ -15,8 +15,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
-    public static final double leftFlapUp = 0.0;
-    public static final double leftFlapDown = 0.35;
+    public static final double leftFlapUp = 0.56;
+    public static final double leftFlapDown = 0.92;
     public static final double rightFlapUp = 0.73;
     public static final double rightFlapDown = 0.35;
     public static final double liftExtend = 0.1;
